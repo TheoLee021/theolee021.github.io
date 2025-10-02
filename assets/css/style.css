@@ -1,0 +1,384 @@
+/*
+ * Main stylesheet for the portfolio website.
+ * The goal is to keep the design simple and clean while adding a touch of
+ * creativity through colors, subtle animations and a modern layout. Feel free
+ * to tweak the colors or spacing to suit your own personal style.
+ */
+
+/* Define a few CSS variables to make color adjustments easy */
+:root {
+  --font-primary: 'Arial', sans-serif;
+  --primary-color: #0d253f; /* Dark blue used for footer and text accents */
+  --secondary-color: #00bfa6; /* Teal accent used for highlights and buttons */
+  --light-color: #f5f5f5; /* Light background for sections */
+  --dark-text: #333333; /* Primary text color */
+}
+
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-primary);
+  color: var(--dark-text);
+  background-color: var(--light-color);
+  line-height: 1.6;
+}
+
+/* -------------------------------------------------- */
+/* Header (hero) styles */
+/* -------------------------------------------------- */
+
+header {
+  background-image: url('../images/hero.png');
+  background: var(--primary-color);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  color: #ffffff;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dark overlay on the hero image to increase contrast */
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 0;
+}
+
+/* Navigation bar */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+nav .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+nav .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+}
+
+nav .nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+}
+
+nav .nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: var(--secondary-color);
+  transition: width 0.3s;
+}
+
+nav .nav-links a:hover {
+  color: var(--secondary-color);
+}
+
+nav .nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Hero content */
+.hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 1;
+  padding: 0 20px;
+}
+
+.hero-content h1 {
+  font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.hero-content h1 span {
+  color: var(--secondary-color);
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+}
+
+.cta-button {
+  padding: 12px 28px;
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.cta-button:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
+/* Section styles */
+/* -------------------------------------------------- */
+
+section {
+  padding: 60px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+  position: relative;
+}
+
+section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--secondary-color);
+  margin: 10px auto 0;
+}
+
+.about-section p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* -------------------------------------------------- */
+/* Projects section */
+/* -------------------------------------------------- */
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.project-card {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+}
+
+.project-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.project-card h3 {
+  font-size: 1.3rem;
+  margin: 16px;
+  color: var(--primary-color);
+}
+
+.project-card p {
+  margin: 0 16px 16px;
+  color: var(--dark-text);
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.project-card .project-link {
+  margin: 0 16px 16px;
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 600;
+  align-self: flex-start;
+  transition: color 0.3s;
+}
+
+.project-card .project-link:hover {
+  color: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
+/* Tech stack styles */
+/* -------------------------------------------------- */
+
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.tech-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+  text-align: center;
+}
+
+.tech-item svg {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 8px;
+}
+
+.tech-item span {
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Individual icon colors */
+.python-icon svg path {
+  fill: #3776AB;
+}
+
+.cplusplus-icon svg path {
+  fill: #00599C;
+}
+
+.javascript-icon svg path {
+  fill: #F7DF1E;
+}
+
+.react-icon svg path {
+  fill: #61DAFB;
+}
+
+.nodejs-icon svg path {
+  fill: #339933;
+}
+
+.html5-icon svg path {
+  fill: #E34F26;
+}
+
+/* -------------------------------------------------- */
+/* Resume section */
+/* -------------------------------------------------- */
+
+.resume-section p {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1rem;
+}
+
+.resume-link {
+  display: inline-block;
+  padding: 10px 24px;
+  border: 2px solid var(--secondary-color);
+  border-radius: 4px;
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s, color 0.3s;
+}
+
+.resume-link:hover {
+  background: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
+/* Contact section */
+/* -------------------------------------------------- */
+
+.contact-section p {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.social-links a svg {
+  width: 40px;
+  height: 40px;
+  fill: var(--secondary-color);
+  transition: fill 0.3s;
+}
+
+.social-links a:hover svg {
+  fill: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
+/* Footer styles */
+/* -------------------------------------------------- */
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background: var(--primary-color);
+  color: #ffffff;
+  font-size: 0.9rem;
+}
+
+/* -------------------------------------------------- */
+/* Responsive tweaks */
+/* -------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+  .hero-content p {
+    font-size: 1rem;
+  }
+  .cta-button {
+    padding: 10px 20px;
+  }
+  nav .nav-links {
+    gap: 16px;
+  }
+  section {
+    padding: 50px 16px;
+  }
+}
