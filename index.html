@@ -21,7 +21,7 @@
       </ul>
     </nav>
     <div class="hero-content">
-      <h1>Hello, I'm <span class="typing-effect">Computer&nbsp;Science&nbsp;Student</span></h1>
+      <h1>Hello, I'm <span id="typing-text" class="typing-effect"></span></h1>
       <p>Passionate about software engineering and crafting meaningful solutions.</p>
       <a href="#projects" class="cta-button">See My Work</a>
     </div>
@@ -150,5 +150,66 @@
   <footer>
     <p>&copy; 2025 Computer Science Student. All rights reserved.</p>
   </footer>
+
+  <script>
+    // Sequential typing effect
+    const typingElement = document.getElementById('typing-text');
+    const texts = ['Theo Lee', 'Computer Science Student'];
+    let currentTextIndex = 0;
+    let currentCharIndex = 0;
+    let isDeleting = false;
+    let isCompleted = false;
+
+    function typeText() {
+      if (isCompleted) return; // Stop if animation is completed
+      
+      const currentText = texts[currentTextIndex];
+      
+      if (isDeleting) {
+        // Erasing text
+        typingElement.textContent = currentText.substring(0, currentCharIndex - 1);
+        currentCharIndex--;
+        
+        if (currentCharIndex === 0) {
+          isDeleting = false;
+          currentTextIndex++;
+          
+          // If we've shown all texts, stop the animation
+          if (currentTextIndex >= texts.length) {
+            isCompleted = true;
+            return;
+          }
+          
+          setTimeout(typeText, 500); // Wait before typing next text
+          return;
+        }
+      } else {
+        // Typing text
+        typingElement.textContent = currentText.substring(0, currentCharIndex + 1);
+        currentCharIndex++;
+        
+        if (currentCharIndex === currentText.length) {
+          // If this is the last text, don't erase it
+          if (currentTextIndex === texts.length - 1) {
+            isCompleted = true;
+            return;
+          }
+          
+          setTimeout(() => {
+            isDeleting = true;
+            typeText();
+          }, 2000); // Wait 2 seconds before erasing
+          return;
+        }
+      }
+      
+      setTimeout(typeText, isDeleting ? 100 : 150); // Faster when deleting
+    }
+
+    // Start typing effect when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(typeText, 1000); // Start after 1 second
+    });
+  </script>
 </body>
 </html>

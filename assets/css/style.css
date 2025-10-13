@@ -132,8 +132,7 @@ nav .nav-links a:hover::after {
   overflow: hidden;
   white-space: nowrap;
   border-right: 2px solid var(--secondary-color);
-  animation: typing 2.4s steps(24, end), blink-caret 1s step-end infinite;
-  animation-fill-mode: forwards;
+  animation: blink-caret 1s step-end infinite;
   line-height: 1;
   vertical-align: text-bottom;
   text-align: left;
@@ -141,6 +140,17 @@ nav .nav-links a:hover::after {
   margin: 0;
   box-sizing: border-box;
   height: 1em;
+  min-width: 2px;
+}
+
+.typing-effect.typing {
+  animation: typing 2s steps(20, end), blink-caret 1s step-end infinite;
+  animation-fill-mode: forwards;
+}
+
+.typing-effect.erasing {
+  animation: erasing 1s steps(20, end), blink-caret 1s step-end infinite;
+  animation-fill-mode: forwards;
 }
 
 @keyframes typing {
@@ -148,7 +158,16 @@ nav .nav-links a:hover::after {
     width: 0;
   }
   to {
-    width: calc(23ch + 0px);
+    width: calc(20ch + 2px);
+  }
+}
+
+@keyframes erasing {
+  from {
+    width: calc(20ch + 2px);
+  }
+  to {
+    width: 0;
   }
 }
 
