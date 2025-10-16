@@ -64,6 +64,7 @@ nav {
   padding: 20px 40px;
   position: relative;
   z-index: 1;
+  gap: 30px; /* Minimum gap between logo and nav-links */
 }
 
 nav .logo {
@@ -183,7 +184,7 @@ nav .nav-links a:hover::after {
 .hero-content p {
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
-  max-width: 600px;
+  max-width: 800px;
 }
 
 .cta-button {
@@ -441,4 +442,36 @@ footer {
   section {
     padding: 50px 16px;
   }
+}
+
+/* Responsive font sizes for screens 580px and below */
+@media (max-width: 590px) {
+  /* Navigation - two rows on mobile */
+  nav {
+    gap: 15px;
+    padding: 15px 20px;
+  }
+  
+  nav .logo {
+    text-align: center;
+  }
+  
+  nav .nav-links {
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  /* Allow typing effect to wrap on mobile */
+  .typing-effect {
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    display: inline;
+    height: auto;
+  }
+  
+  /* .hero-content h1 {
+    font-size: calc(1.4rem + 1.5vw);
+  } */
 }
