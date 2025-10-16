@@ -81,6 +81,7 @@ nav .nav-links {
 nav .nav-links a {
   color: #ffffff;
   text-decoration: none;
+  font-size: 1.1rem;
   font-weight: 500;
   position: relative;
   transition: color 0.3s;
@@ -410,6 +411,15 @@ section h2::after {
   fill: var(--primary-color);
 }
 
+/* Gmail icon specific styling */
+.gmail-icon svg {
+  fill: #EA4335; /* Gmail red color */
+}
+
+.gmail-icon:hover svg {
+  fill: #C5221F; /* Darker red on hover */
+}
+
 /* -------------------------------------------------- */
 /* Footer styles */
 /* -------------------------------------------------- */
@@ -438,6 +448,9 @@ footer {
   }
   nav .nav-links {
     gap: 16px;
+  }
+  nav .nav-links a {
+    font-size: 1rem;
   }
   section {
     padding: 50px 16px;
@@ -470,8 +483,4 @@ footer {
     display: inline;
     height: auto;
   }
-  
-  /* .hero-content h1 {
-    font-size: calc(1.4rem + 1.5vw);
-  } */
 }
