@@ -486,15 +486,8 @@ section h2::after {
 }
 
 /* -------------------------------------------------- */
-/* Contact section */
+/* Contact links (inside the hero) */
 /* -------------------------------------------------- */
-
-.contact-section p {
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
-  font-size: 1rem;
-}
 
 .social-links {
   display: flex;
