@@ -12,6 +12,7 @@
   --secondary-color: #00bfa6; /* Teal accent used for highlights and buttons */
   --light-color: #f5f5f5; /* Light background for sections */
   --dark-text: #333333; /* Primary text color */
+  --hero-color: #05101C; /* Hero background after its dark overlay; used by the nav and menu */
 }
 
 /* Reset some default styles */
@@ -55,26 +56,91 @@ header::before {
   z-index: 0;
 }
 
-/* Navigation bar */
+/* Navigation bar: fixed so it follows the reader down the page */
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  position: relative;
-  z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
   gap: 30px; /* Minimum gap between logo and nav-links */
+  background: transparent;
+  transition: background 0.3s, box-shadow 0.3s, padding 0.3s;
+}
+
+/* Added by script once the page is scrolled past the hero top */
+nav.nav--scrolled {
+  background: var(--hero-color);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  padding: 12px 40px;
 }
 
 nav .logo {
   font-size: 1.5rem;
   font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+nav .logo:hover,
+nav .logo:focus-visible {
+  color: var(--secondary-color);
 }
 
 nav .nav-links {
   list-style: none;
   display: flex;
   gap: 24px;
+}
+
+/* Social icons live in the mobile menu panel only */
+.nav-social {
+  display: none;
+}
+
+/* Hamburger button: only shown on narrow screens */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.nav-toggle__bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: transform 0.3s, opacity 0.2s;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 2px;
 }
 
 nav .nav-links a {
@@ -210,6 +276,7 @@ section {
   padding: 60px 20px;
   max-width: 1100px;
   margin: 0 auto;
+  scroll-margin-top: 64px; /* matches the scrolled nav height so no gap shows */
 }
 
 section h2 {
@@ -252,7 +319,6 @@ section h2::after {
   border-radius: 8px;
   padding: 24px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid var(--secondary-color);
 }
 
 .experience-head {
@@ -297,22 +363,21 @@ section h2::after {
 /* Projects section */
 /* -------------------------------------------------- */
 
-.projects-hint {
-  text-align: center;
-  font-size: 0.9rem;
-  color: #666666;
-  margin-top: 12px;
-}
-
 .projects-scroller {
   display: flex;
   gap: 30px;
-  margin-top: 28px;
+  margin-top: 40px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 4px 4px 16px;
-  scroll-snap-type: x proximity;
-  scrollbar-width: thin;
+  padding: 4px 4px 10px;
+  /* The cards move on their own, so the scrollbar is visual noise.
+     Scrolling by wheel, drag and keyboard still works. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.projects-scroller::-webkit-scrollbar {
+  display: none;
 }
 
 .projects-scroller:focus-visible {
@@ -322,7 +387,13 @@ section h2::after {
 
 .projects-scroller .project-card {
   flex: 0 0 clamp(280px, calc((100% - 30px) / 2), 515px);
-  scroll-snap-align: start;
+}
+
+/* The auto-scroll is decorative motion, so honour the reduced-motion setting */
+@media (prefers-reduced-motion: reduce) {
+  .project-card {
+    transition: none;
+  }
 }
 
 .project-card {
@@ -503,19 +574,12 @@ section h2::after {
   transition: fill 0.3s;
 }
 
-.social-links a:hover svg {
-  fill: var(--primary-color);
+.social-links a:hover svg,
+.social-links a:focus-visible svg {
+  fill: #ffffff;
 }
 
 /* Gmail icon specific styling */
-.gmail-icon svg {
-  fill: #EA4335; /* Gmail red color */
-}
-
-.gmail-icon:hover svg {
-  fill: #C5221F; /* Darker red on hover */
-}
-
 /* -------------------------------------------------- */
 /* Footer styles */
 /* -------------------------------------------------- */
@@ -542,35 +606,95 @@ footer {
   .cta-button {
     padding: 10px 20px;
   }
-  nav .nav-links {
-    gap: 16px;
-  }
-  nav .nav-links a {
-    font-size: 1rem;
-  }
   section {
     padding: 50px 16px;
+  }
+
+  /* Collapse the links into a hamburger menu */
+  .nav-toggle {
+    display: flex;
+  }
+
+  /* Full-screen menu panel */
+  nav .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 8px;
+    padding: 0 40px;
+    background: var(--hero-color);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s;
+  }
+
+  nav .nav-links.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  nav .nav-links li {
+    width: 100%;
+    text-align: right;
+  }
+
+  nav .nav-links a {
+    display: block;
+    padding: 14px 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  /* The underline hover effect does not suit full-width rows */
+  nav .nav-links a::after {
+    display: none;
+  }
+
+  .nav-social {
+    display: block;
+    margin-top: 28px;
+  }
+
+  .nav-social .social-links {
+    justify-content: flex-end;
+    gap: 28px;
+    margin-top: 0;
+  }
+
+  .nav-social .social-links a svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Keep the button above the panel so it can close it */
+  .nav-toggle {
+    position: relative;
+    z-index: 2;
+  }
+
+  nav .logo {
+    position: relative;
+    z-index: 2;
   }
 }
 
 /* Responsive font sizes for screens 580px and below */
 @media (max-width: 590px) {
-  /* Navigation - two rows on mobile */
   nav {
     gap: 15px;
     padding: 15px 20px;
   }
-  
-  nav .logo {
-    text-align: center;
+
+  nav.nav--scrolled {
+    padding: 10px 20px;
   }
-  
-  nav .nav-links {
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  
+
   /* Allow typing effect to wrap on mobile */
   .typing-effect {
     white-space: normal;
