@@ -92,20 +92,50 @@
     <!-- Projects section -->
     <section id="projects" class="projects-section">
       <h2>Projects</h2>
-      <div class="projects-grid">
-        <!-- Project card 1 -->
+      <p class="projects-hint">Scroll sideways for more projects.</p>
+      <div class="projects-scroller" tabindex="0" role="region" aria-label="Projects, scroll horizontally to see more">
+        <div class="project-card">
+          <img src="assets/images/watchtower.webp" alt="WatchTower dashboard showing error counts and Core Web Vitals" loading="lazy">
+          <h3>WatchTower</h3>
+          <p>Backend Lead on a 13-person Agile team building a lightweight observability dashboard on Cloudflare Workers and D1. Owned the data model, API contract, and the event-ingestion worker with batch validation, payload size limits, and idempotent inserts.</p>
+          <div class="project-links">
+            <a href="https://github.com/cse110-sp26-group7/Watchtower" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://cse110-sp26-group7.github.io/Watchtower/landing/" class="project-link" target="_blank" rel="noopener noreferrer">Landing</a>
+            <a href="https://youtu.be/rJK7l-YkAIY" class="project-link" target="_blank" rel="noopener noreferrer">Demo</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="assets/images/study-room.webp" alt="ucsd-study-room command line interface output" loading="lazy">
+          <h3>ucsd-study-room</h3>
+          <p>An open-source CLI tool and MCP server published to PyPI that automates UCSD study room search and booking through headless Chrome, handling SAML SSO and Duo Push 2FA with OS-native keychain credential storage.</p>
+          <div class="project-links">
+            <a href="https://github.com/TheoLee021/ucsd-study-room" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://pypi.org/project/ucsd-study-room/" class="project-link" target="_blank" rel="noopener noreferrer">PyPI</a>
+          </div>
+        </div>
+        <div class="project-card">
+          <img src="assets/images/pyblender.webp" alt="Procedural clay material rendered in Blender by the agent" loading="lazy">
+          <h3>PyBlender-Agent</h3>
+          <p>An AI agent that generates Blender procedural materials from natural language. A RAG pipeline retrieves Blender's Python API documentation from a vector database, and MCP JSON-RPC connects the agent to a headless Blender instance that executes the generated code.</p>
+          <div class="project-links">
+            <a href="https://github.com/TheoLee021/PyBlender-Agent-V1" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
+        </div>
         <div class="project-card">
           <img src="assets/images/treemap.webp" alt="Interactive map of De Anza campus trees" loading="lazy">
-          <h3>Campus Tree Map</h3>
-          <p>A web application for visualizing and managing tree data on the De Anza campus. Built with Django and PostGIS, this application provides an interactive map interface to explore trees on campus.</p>
-          <a href="https://github.com/TheoLee021/DATreeMap" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          <h3>DATreeMap</h3>
+          <p>A Django and PostGIS application serving 2,300+ campus trees on an interactive map for De Anza's Environmental Monitoring Club. REST APIs return GeoJSON over PostGIS spatial queries, with typical queries under 200 ms.</p>
+          <div class="project-links">
+            <a href="https://github.com/TheoLee021/DATreeMap" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
         </div>
-        <!-- Project card 2 -->
         <div class="project-card">
           <img src="assets/images/AstroSweep.gif" alt="AstroSweep 3D space debris simulation" loading="lazy">
-          <h3>Astro Sweep</h3>
-          <p>An interactive 3D simulation game prototype designed to raise awareness about space debris issues and explore potential solutions</p>
-          <a href="https://github.com/TheoLee021/DaHacks3.0" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+          <h3>AstroSweep</h3>
+          <p>A 3D simulation game prototype about space debris cleanup, built with Flask and CesiumJS. Simulates 500 debris objects across three orbital layers using real orbital mechanics. Won 2nd place at DA Hacks 3.0.</p>
+          <div class="project-links">
+            <a href="https://github.com/TheoLee021/AstroSweep" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </div>
         </div>
       </div>
     </section>
