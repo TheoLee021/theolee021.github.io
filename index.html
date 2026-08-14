@@ -14,6 +14,7 @@
       <div class="logo">THEO</div>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
         <li><a href="#projects">Projects</a></li>
         <li><a href="#stack">Tech&nbsp;Stack</a></li>
         <li><a href="#resume">Resume</a></li>
@@ -48,10 +49,44 @@
     <section id="about" class="about-section">
       <h2>About Me</h2>
       <p>
-        I'm Theo Lee, an undergraduate computer science student at UC San Diego. I enjoy
-        exploring new technologies and turning ideas into working applications. 
-        I'm focusing on backend systems and AI-enabled applications.
+        I'm Theo Lee, a computer science student at UC San Diego, graduating in
+        December 2027. I transferred from De Anza College, where I founded the
+        Environmental Monitoring Club. I work mostly on backend systems: data
+        models and REST APIs, containerized environments, and CI/CD pipelines
+        that ship to production.
       </p>
+    </section>
+
+    <!-- Experience section -->
+    <section id="experience" class="experience-section">
+      <h2>Experience</h2>
+      <div class="experience-list">
+        <article class="experience-item">
+          <div class="experience-head">
+            <h3>Software Engineering Intern</h3>
+            <span class="experience-date">Jun 2025 &ndash; Aug 2025, Jun 2026 &ndash; Present</span>
+          </div>
+          <p class="experience-org">Chopstickstory (Nonprofit) &middot; Cupertino, CA</p>
+          <ul>
+            <li>Led a 4-person intern team building a full-stack member, volunteer, and event platform with Django and React.</li>
+            <li>Designed data models and REST APIs for 7 resources with 1:N and N:N relationships, implementing JWT authentication and admin dashboards.</li>
+            <li>Containerized the development environment with Docker to resolve cross-OS inconsistency across the team.</li>
+            <li>Built a GitHub Actions CD pipeline that ships Docker images through Azure Container Registry to Azure App Service on merge to main.</li>
+          </ul>
+        </article>
+        <article class="experience-item">
+          <div class="experience-head">
+            <h3>Undergraduate Researcher</h3>
+            <span class="experience-date">Sep 2025 &ndash; Jun 2026</span>
+          </div>
+          <p class="experience-org">UC San Diego CSE, Early Research Scholars Program &middot; La Jolla, CA</p>
+          <ul>
+            <li>Researched AI agent pipelines that generate Blender procedural materials from expert tutorial videos.</li>
+            <li>Redesigned the pipeline's encoding and code-generation stages with iterative procedure composition and a multi-agent planner, coder, and verifier workflow, reaching the best CLIP similarity across all test materials (0.847 against a 0.839 baseline).</li>
+            <li>Presented findings at UCSD's Undergraduate Engineering Research Symposium.</li>
+          </ul>
+        </article>
+      </div>
     </section>
 
     <!-- Projects section -->
