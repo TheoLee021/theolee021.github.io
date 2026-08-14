@@ -33,7 +33,6 @@ body {
 /* -------------------------------------------------- */
 
 header {
-  background-image: url('../images/hero.png');
   background: var(--primary-color);
   background-size: cover;
   background-position: center;
@@ -44,7 +43,7 @@ header {
   flex-direction: column;
 }
 
-/* Dark overlay on the hero image to increase contrast */
+/* Dark overlay on the hero to increase text contrast */
 header::before {
   content: '';
   position: absolute;
