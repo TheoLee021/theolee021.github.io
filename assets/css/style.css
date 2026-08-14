@@ -488,13 +488,12 @@ section h2::after {
   margin-top: 4px;
 }
 
-/* Individual icon colors */
+/* Individual icon colors (Java and LangChain carry their own brand colors) */
 .python-icon svg path { fill: #3776AB; }
 .javascript-icon svg path { fill: #F7DF1E; }
 .cplusplus-icon svg path { fill: #00599C; }
 .html5-icon svg path { fill: #E34F26; }
 .c-icon svg path { fill: #A8B9CC; }
-.java-icon svg path { fill: #437291; }
 .django-icon svg path { fill: #092E20; }
 .react-icon svg path { fill: #61DAFB; }
 .flask-icon svg path { fill: #000000; }
@@ -508,7 +507,6 @@ section h2::after {
 .pytest-icon svg path { fill: #0A9EDC; }
 .vitest-icon svg path { fill: #6E9F18; }
 .playwright-icon svg path { fill: #2EAD33; }
-.langchain-icon svg path { fill: #1C3C3C; }
 
 /* Text chips for items without a brand icon */
 .tech-item--text .tech-chip {
