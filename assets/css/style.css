@@ -363,10 +363,48 @@ section h2::after {
 /* Projects section */
 /* -------------------------------------------------- */
 
+/* Title buttons above the carousel: click to jump to that project */
+.project-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.project-tab {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  background: #ffffff;
+  border: 1px solid rgba(13, 37, 63, 0.15);
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.project-tab:hover {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.project-tab:focus-visible {
+  outline: 3px solid var(--secondary-color);
+  outline-offset: 2px;
+}
+
+.project-tab[aria-current='true'] {
+  background: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: #ffffff;
+}
+
 .projects-scroller {
   display: flex;
   gap: 30px;
-  margin-top: 40px;
+  margin-top: 20px;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 4px 4px 10px;
@@ -691,6 +729,16 @@ footer {
 
   nav.nav--scrolled {
     padding: 10px 20px;
+  }
+
+  /* Keep the project buttons to fewer rows on a narrow screen */
+  .project-tabs {
+    gap: 8px;
+  }
+
+  .project-tab {
+    font-size: 0.82rem;
+    padding: 6px 12px;
   }
 
   /* Allow typing effect to wrap on mobile */

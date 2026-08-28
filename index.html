@@ -330,10 +330,36 @@
         track.appendChild(clone);
       });
 
+      // One button per project, built from the card titles so the two stay in sync.
+      // They only do anything with JS running, so they are created here.
+      const tabs = document.createElement('div');
+      tabs.className = 'project-tabs';
+      tabs.setAttribute('aria-label', 'Jump to a project');
+      const buttons = originals.map((card, i) => {
+        const title = card.querySelector('h3');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'project-tab';
+        btn.textContent = title ? title.textContent : 'Project ' + (i + 1);
+        btn.addEventListener('click', () => goTo(i));
+        tabs.appendChild(btn);
+        return btn;
+      });
+      track.insertAdjacentElement('beforebegin', tabs);
+
       let loopWidth = 0;
+      // Each card's centre, measured from the start of the loop.
+      let centers = [];
       function measure() {
         const firstClone = track.querySelectorAll('.project-card')[originals.length];
         loopWidth = firstClone ? firstClone.offsetLeft - originals[0].offsetLeft : 0;
+        // Read the centres straight off the layout, in scroll coordinates,
+        // so the scroller's own padding needs no correction here.
+        const trackLeft = track.getBoundingClientRect().left - track.scrollLeft;
+        centers = originals.map((card) => {
+          const rect = card.getBoundingClientRect();
+          return rect.left + rect.width / 2 - trackLeft;
+        });
       }
       measure();
       window.addEventListener('resize', measure);
@@ -355,8 +381,56 @@
       }, { passive: true });
       track.addEventListener('touchend', () => {
         clearTimeout(touchPauseTimer);
-        touchPauseTimer = setTimeout(resume, 2500);
+        touchPauseTimer = setTimeout(resume, 1000);
       }, { passive: true });
+
+      // The track wraps, so distances are compared on the shorter way around.
+      function shortest(delta) {
+        if (loopWidth <= 0) return delta;
+        delta = ((delta % loopWidth) + loopWidth) % loopWidth;
+        if (delta > loopWidth / 2) delta -= loopWidth;
+        return delta;
+      }
+
+      let target = null;
+      let clickPauseTimer = null;
+
+      // Bring a card to the middle of the scroller and hold it there
+      // briefly, so the auto-scroll does not drift off it right away.
+      function goTo(index) {
+        if (loopWidth <= 0) measure();
+        if (loopWidth <= 0) return;
+        const wanted = centers[index] - track.clientWidth / 2;
+        target = ((wanted % loopWidth) + loopWidth) % loopWidth;
+        paused = true;
+        clearTimeout(clickPauseTimer);
+        clickPauseTimer = setTimeout(resume, 1000);
+        setActive(index);
+      }
+
+      let activeIndex = -1;
+      function setActive(index) {
+        if (index === activeIndex) return;
+        activeIndex = index;
+        buttons.forEach((btn, i) => {
+          if (i === index) btn.setAttribute('aria-current', 'true');
+          else btn.removeAttribute('aria-current');
+        });
+      }
+      setActive(0);
+
+      // Whichever card sits closest to the middle is the current one.
+      function syncActive() {
+        if (loopWidth <= 0) return;
+        const viewCenter = pos + track.clientWidth / 2;
+        let best = 0;
+        let bestDist = Infinity;
+        centers.forEach((c, i) => {
+          const d = Math.abs(shortest(c - viewCenter));
+          if (d < bestDist) { bestDist = d; best = i; }
+        });
+        setActive(best);
+      }
 
       const SPEED = 36; // pixels per second
       let last = null;
@@ -370,12 +444,23 @@
         const dt = (now - last) / 1000;
         last = now;
 
-        // If the reader scrolled by hand, adopt their position
+        // If the reader scrolled by hand, adopt their position and drop
+        // any jump in progress -- they have taken over.
         if (lastApplied >= 0 && Math.abs(track.scrollLeft - lastApplied) > 1) {
           pos = track.scrollLeft;
+          target = null;
         }
 
-        if (!paused && !reduceMotion.matches && loopWidth > 0) {
+        if (target !== null) {
+          const delta = shortest(target - pos);
+          if (reduceMotion.matches || Math.abs(delta) < 0.5) {
+            pos = target;
+            target = null;
+          } else {
+            // Frame-rate independent ease-out toward the target.
+            pos += delta * (1 - Math.exp(-9 * dt));
+          }
+        } else if (!paused && !reduceMotion.matches && loopWidth > 0) {
           pos += SPEED * dt;
         }
         if (loopWidth > 0) {
@@ -385,6 +470,7 @@
 
         track.scrollLeft = pos;
         lastApplied = track.scrollLeft;
+        syncActive();
         requestAnimationFrame(step);
       }
       requestAnimationFrame(step);
