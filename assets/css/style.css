@@ -345,6 +345,19 @@ section h2::after {
   margin-top: 4px;
 }
 
+.experience-org a {
+  color: var(--secondary-color);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.experience-org a:hover,
+.experience-org a:focus-visible {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
 .experience-item ul {
   margin: 14px 0 0 18px;
 }

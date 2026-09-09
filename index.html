@@ -90,9 +90,9 @@
         <article class="experience-item">
           <div class="experience-head">
             <h3>Software Engineering Intern</h3>
-            <span class="experience-date">Jun 2025 &ndash; Aug 2025, Jun 2026 &ndash; Present</span>
+            <span class="experience-date">Jun 2025 &ndash; Aug 2025, Jun 2026 &ndash; Sep 2026</span>
           </div>
-          <p class="experience-org">Chopstickstory (Nonprofit) &middot; Cupertino, CA</p>
+          <p class="experience-org"><a href="#projects" data-project="chopstickstory">Chopstickstory (Nonprofit)</a> &middot; Cupertino, CA</p>
           <ul>
             <li>Led a 4-person intern team building a full-stack member, volunteer, and event platform with Django and React.</li>
             <li>Designed data models and REST APIs for 7 resources with 1:N and N:N relationships, implementing JWT authentication and admin dashboards.</li>
@@ -119,6 +119,14 @@
     <section id="projects" class="projects-section">
       <h2>Projects</h2>
       <div class="projects-scroller" tabindex="0" role="region" aria-label="Projects, scroll horizontally to see more">
+        <div class="project-card" data-project="chopstickstory">
+          <img src="assets/images/chopstickstory.webp" alt="Chopstickstory home page with the site navigation and a Discover Korean Culture headline" loading="lazy">
+          <h3>Chopstickstory</h3>
+          <p>The public site and internal platform for a Korean cultural nonprofit, live at chopstickstory.org with roughly 1,000 unique visitors a week. Visitors browse programs and register for events, while staff manage reservations, volunteer applications, and work logs from the admin. A Django REST API on Azure App Service serves a React frontend on Cloudflare Pages.</p>
+          <div class="project-links">
+            <a href="https://chopstickstory.org" class="project-link" target="_blank" rel="noopener noreferrer">Live Site</a>
+          </div>
+        </div>
         <div class="project-card">
           <img src="assets/images/watchtower.webp" alt="WatchTower dashboard showing error counts and Core Web Vitals" loading="lazy">
           <h3>WatchTower</h3>
@@ -407,6 +415,16 @@
         clickPauseTimer = setTimeout(resume, 1000);
         setActive(index);
       }
+
+      // Links elsewhere on the page (the Experience entry) can point at a card.
+      // The href jumps to the Projects section; this centres the right card.
+      document.querySelectorAll('a[data-project]').forEach((link) => {
+        const i = originals.findIndex((card) => card.dataset.project === link.dataset.project);
+        if (i < 0) return;
+        link.addEventListener('click', () => {
+          requestAnimationFrame(() => goTo(i));
+        });
+      });
 
       let activeIndex = -1;
       function setActive(index) {
