@@ -28,8 +28,8 @@
       <ul class="nav-links" id="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
-        <li><a href="#research">Research</a></li>
         <li><a href="#projects">Projects</a></li>
+        <li><a href="#research">Research</a></li>
         <li><a href="#stack">Tech&nbsp;Stack</a></li>
         <li><a href="#resume">Resume</a></li>
         <li class="nav-social">
@@ -116,34 +116,6 @@
       </div>
     </section>
 
-    <!-- Research section -->
-    <section id="research" class="research-section">
-      <h2>Research</h2>
-      <article class="research-item">
-        <a class="research-poster" href="assets/docs/ersp-uers-poster.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open the full research poster as a PDF">
-          <img src="assets/images/ersp-poster.webp" alt="Research poster titled Agentic VLMs for Procedural Material Generation, laid out in panels covering background, problem statement, methodology, results and analysis" loading="lazy">
-        </a>
-        <div class="research-body">
-          <div class="research-head">
-            <h3>Agentic VLMs for Procedural Material Generation</h3>
-            <span class="research-date">May 28, 2026</span>
-          </div>
-          <p class="research-org">UCSD Undergraduate Engineering Research Symposium &middot; Early Research Scholars Program</p>
-          <p>I worked on this year-long project in Prof. Manmohan Chandraker’s lab as part of a team of four undergraduates, mentored by a PhD student and a master’s student. We studied how to generate procedural materials in Blender from expert tutorial videos. The baseline pipeline can lose detail at two stages: merging tutorials in a single pass and condensing the combined procedure before generating code. We redesigned both stages, replacing the one-shot merge with iterative procedure composition and the single-pass compiler with progressive compilation through an Orchestrator–Generator–Verifier workflow.</p>
-          <p>I focused on inference-time scaling, designing the multi-step decomposition and step-level LLM verification between stages. I also ran an ablation study across four pipeline variants to evaluate the trade-off between quality and cost. We measured CLIP similarity, style loss, sliced Wasserstein distance, and graph edit distance, along with cost per run.</p>
-          <ul>
-            <li>The integrated pipeline achieved the highest average CLIP similarity of the four variants, scoring 0.847 compared with the one-shot baseline’s 0.831. It was also the only variant to outperform the baseline on every tested material.</li>
-            <li>Redesigning only the encoding stage increased average CLIP similarity to 0.839 while reducing cost per run from $3.48 to $3.15—about 9% less. The full integrated pipeline cost $5.10 per run.</li>
-            <li>The improvements varied by material: the encoding-only variant increased CLIP similarity over the baseline by 0.033 for steel and 0.035 for pineapple but reduced it by 0.043 for mahogany.</li>
-            <li>Pineapple remained the most challenging material, with the lowest CLIP similarity across all four variants.</li>
-          </ul>
-          <div class="project-links">
-            <a href="assets/docs/ersp-uers-poster.pdf" class="project-link" target="_blank" rel="noopener noreferrer">Poster (PDF)</a>
-          </div>
-        </div>
-      </article>
-    </section>
-
     <!-- Projects section -->
     <section id="projects" class="projects-section">
       <h2>Projects</h2>
@@ -200,6 +172,34 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- Research section -->
+    <section id="research" class="research-section">
+      <h2>Research</h2>
+      <article class="research-item">
+        <a class="research-poster" href="assets/docs/ersp-uers-poster.pdf" target="_blank" rel="noopener noreferrer" aria-label="Open the full research poster as a PDF">
+          <img src="assets/images/ersp-poster.webp" alt="Research poster titled Agentic VLMs for Procedural Material Generation, laid out in panels covering background, problem statement, methodology, results and analysis" loading="lazy">
+        </a>
+        <div class="research-body">
+          <div class="research-head">
+            <h3>Agentic VLMs for Procedural Material Generation</h3>
+            <span class="research-date">May 28, 2026</span>
+          </div>
+          <p class="research-org">UCSD Undergraduate Engineering Research Symposium &middot; Early Research Scholars Program</p>
+          <p>I worked on this year-long project in Prof. Manmohan Chandraker’s lab as part of a team of four undergraduates, mentored by a PhD student and a master’s student. We studied how to generate procedural materials in Blender from expert tutorial videos. The baseline pipeline can lose detail at two stages: merging tutorials in a single pass and condensing the combined procedure before generating code. We redesigned both stages, replacing the one-shot merge with iterative procedure composition and the single-pass compiler with progressive compilation through an Orchestrator–Generator–Verifier workflow.</p>
+          <p>I focused on inference-time scaling, designing the multi-step decomposition and step-level LLM verification between stages. I also ran an ablation study across four pipeline variants to evaluate the trade-off between quality and cost. We measured CLIP similarity, style loss, sliced Wasserstein distance, and graph edit distance, along with cost per run.</p>
+          <ul>
+            <li>The integrated pipeline achieved the highest average CLIP similarity of the four variants, scoring 0.847 compared with the one-shot baseline’s 0.831. It was also the only variant to outperform the baseline on every tested material.</li>
+            <li>Redesigning only the encoding stage increased average CLIP similarity to 0.839 while reducing cost per run from $3.48 to $3.15—about 9% less. The full integrated pipeline cost $5.10 per run.</li>
+            <li>The improvements varied by material: the encoding-only variant increased CLIP similarity over the baseline by 0.033 for steel and 0.035 for pineapple but reduced it by 0.043 for mahogany.</li>
+            <li>Pineapple remained the most challenging material, with the lowest CLIP similarity across all four variants.</li>
+          </ul>
+          <div class="project-links">
+            <a href="assets/docs/ersp-uers-poster.pdf" class="project-link" target="_blank" rel="noopener noreferrer">Poster (PDF)</a>
+          </div>
+        </div>
+      </article>
     </section>
 
     <!-- Tech Stack section -->
