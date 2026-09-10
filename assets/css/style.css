@@ -373,6 +373,115 @@ section h2::after {
 }
 
 /* -------------------------------------------------- */
+/* Research section */
+/* -------------------------------------------------- */
+
+.research-item {
+  max-width: 900px;
+  margin: 40px auto 0;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Contain the floated poster so the card wraps it */
+.research-item::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* The poster links to the PDF and the write-up wraps around it */
+.research-poster {
+  display: block;
+  float: left;
+  width: 320px;
+  max-width: 100%;
+  margin: 0 24px 16px 0;
+  border: 1px solid #e2e2e2;
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.research-poster:hover {
+  transform: translateY(-3px);
+}
+
+.research-poster:focus-visible {
+  outline: 2px solid var(--secondary-color);
+  outline-offset: 3px;
+}
+
+.research-poster img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.research-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.research-head h3 {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.research-date {
+  font-size: 0.9rem;
+  color: #666666;
+}
+
+.research-org {
+  font-size: 0.95rem;
+  color: #666666;
+  margin-top: 4px;
+}
+
+.research-body > p:not(.research-org) {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-top: 14px;
+}
+
+.research-body ul {
+  margin: 14px 0 0 18px;
+}
+
+.research-body li {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.research-body li:last-child {
+  margin-bottom: 0;
+}
+
+.research-body .project-links {
+  margin: 16px 0 0;
+}
+
+/* .project-link is only coloured inside .project-card, so restate it here */
+.research-body .project-link {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.research-body .project-link:hover,
+.research-body .project-link:focus-visible {
+  color: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
 /* Projects section */
 /* -------------------------------------------------- */
 
@@ -657,6 +766,17 @@ footer {
   }
   section {
     padding: 50px 16px;
+  }
+
+  /* Stack the poster above the write-up on narrow screens */
+  .research-item {
+    padding: 20px;
+  }
+
+  .research-poster {
+    float: none;
+    width: 100%;
+    margin: 0 0 16px;
   }
 
   /* Collapse the links into a hamburger menu */
