@@ -44,6 +44,12 @@ nav .cs-back:focus-visible {
     gap: 56px;
     padding-left: 24px;
     padding-right: 24px;
+    /* The text column is centred inside an 816px article, 88px in from each
+       side. Shift the whole layout left by that much, so the text starts where
+       the article does and the page reads as centred; on narrower windows the
+       shift shrinks to zero instead of pushing the TOC off screen. */
+    margin-left: max(0px, calc((100% - 1100px) / 2 - 88px));
+    margin-right: auto;
   }
 
   .cs-toc {
@@ -79,6 +85,9 @@ nav .cs-back:focus-visible {
 
 .cs-article {
   min-width: 0;
+  /* Reading width in rem, not ch: ch scales with each element's own font
+     size, so headings and small labels would get different column widths */
+  --cs-measure: 40rem;
 }
 
 /* Undo the home page's centred, padded <section> defaults */
@@ -94,7 +103,21 @@ nav .cs-back:focus-visible {
 .cs-article ol,
 .cs-article ul,
 .cs-article dl {
-  max-width: 70ch;
+  max-width: var(--cs-measure);
+}
+
+/* Text sits in a centred column at a comfortable reading width, while
+   card grids and diagrams use the full article width around it */
+.cs-hero > *,
+.cs-article > section > *,
+.cs-end,
+.cs-figure figcaption {
+  max-width: var(--cs-measure);
+  margin-inline: auto;
+}
+
+.cs-article > section > .cs-figure {
+  max-width: none;
 }
 
 .cs-article p {
@@ -116,7 +139,7 @@ nav .cs-back:focus-visible {
 .cs-article h3 {
   font-size: 1.15rem;
   color: var(--primary-color);
-  margin: 48px 0 16px;
+  margin-block: 48px 16px;
   scroll-margin-top: 88px;
 }
 
@@ -162,7 +185,7 @@ nav .cs-back:focus-visible {
   display: flex;
   flex-wrap: wrap;
   gap: 12px 40px;
-  margin: 28px 0;
+  margin-block: 28px;
 }
 
 .cs-meta dt,
@@ -200,23 +223,29 @@ nav .cs-back:focus-visible {
   color: var(--primary-color);
 }
 
-.cs-article .cs-tldr {
-  display: grid;
-  gap: 16px;
-  max-width: none;
-}
-
-@media (min-width: 720px) {
-  .cs-article .cs-tldr {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+/* One card in the text column: a label column and a text column, like the
+   decision records further down */
+.cs-tldr {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 8px 24px;
+  box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
 }
 
 .cs-tldr > div {
-  background: #ffffff;
-  border-radius: 6px;
-  padding: 16px 18px;
-  box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
+  padding: 16px 0;
+}
+
+.cs-tldr > div + div {
+  border-top: 1px solid rgba(13, 37, 63, 0.08);
+}
+
+@media (min-width: 720px) {
+  .cs-tldr > div {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 20px;
+  }
 }
 
 /* A short version of the teal rule under the section headings */
@@ -229,9 +258,18 @@ nav .cs-back:focus-visible {
   margin-top: 8px;
 }
 
+.cs-tldr dt {
+  padding-top: 3px;
+}
+
 .cs-tldr dd {
-  margin-top: 10px;
-  line-height: 1.55;
+  line-height: 1.6;
+}
+
+@media (max-width: 719px) {
+  .cs-tldr dd {
+    margin-top: 10px;
+  }
 }
 
 /* -------------------------------------------------- */
@@ -296,7 +334,7 @@ nav .cs-back:focus-visible {
 }
 
 .cs-gotcha {
-  max-width: 70ch;
+  max-width: var(--cs-measure);
   background: #fff8e6;
   border: 1px solid #f0d58a;
   border-radius: 8px;
@@ -321,24 +359,41 @@ nav .cs-back:focus-visible {
   line-height: 1.6;
 }
 
+/* Same single card as the TL;DR, one numbered row per idea */
 .cs-next {
+  counter-reset: next;
   list-style: none;
-  display: grid;
-  gap: 16px;
-}
-
-@media (min-width: 720px) {
-  .cs-article .cs-next {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: none;
-  }
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 8px 24px;
+  box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
 }
 
 .cs-next li {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 18px 20px;
-  box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
+  counter-increment: next;
+  position: relative;
+  padding: 18px 0 18px 42px;
+}
+
+.cs-next li + li {
+  border-top: 1px solid rgba(13, 37, 63, 0.08);
+}
+
+/* Numbered like the booking steps in "Why I built this" */
+.cs-next li::before {
+  content: counter(next);
+  position: absolute;
+  left: 0;
+  top: 17px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(13, 37, 63, 0.08);
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
 }
 
 .cs-next h3 {
@@ -348,7 +403,7 @@ nav .cs-back:focus-visible {
 
 .cs-next p {
   margin: 0;
-  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .cs-end {
@@ -372,6 +427,18 @@ nav .cs-back:focus-visible {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Set by the page script when the diagram is wider than its box */
+@media (pointer: fine) {
+  .cs-figure__scroll.is-scrollable {
+    cursor: grab;
+  }
+}
+
+.cs-figure__scroll.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
 .cs-figure svg {
   display: block;
   width: 100%;
@@ -380,7 +447,7 @@ nav .cs-back:focus-visible {
 }
 
 .cs-figure figcaption {
-  max-width: 70ch;
+  max-width: var(--cs-measure);
   margin-top: 12px;
   font-size: 0.9rem;
   color: #5b6773;
@@ -417,4 +484,103 @@ nav .cs-back:focus-visible {
   .cs-article .cs-lede {
     font-size: 1.1rem;
   }
+}
+
+/* -------------------------------------------------- */
+/* Diagram system: shared by every inline SVG diagram  */
+/* -------------------------------------------------- */
+
+.dg-box {
+  fill: #ffffff;
+  stroke: var(--primary-color);
+  stroke-width: 1.5;
+}
+
+.dg-box--core {
+  fill: var(--primary-color);
+}
+
+.dg-box--ext {
+  fill: var(--light-color);
+  stroke: #9aa5b1;
+  stroke-dasharray: 5 4;
+}
+
+.dg-frame {
+  fill: none;
+  stroke: #c5ccd3;
+  stroke-width: 1;
+}
+
+.dg-frame--hl {
+  fill: rgba(0, 191, 166, 0.06);
+  stroke: var(--secondary-color);
+}
+
+.dg-tab {
+  fill: #ffffff;
+  stroke: #c5ccd3;
+  stroke-width: 1;
+}
+
+.dg-title {
+  font: 600 14px var(--font-primary);
+  fill: var(--primary-color);
+}
+
+.dg-sub {
+  font: 12px var(--font-primary);
+  fill: #5b6773;
+}
+
+.dg-title.dg-on-dark {
+  fill: #ffffff;
+}
+
+.dg-sub.dg-on-dark {
+  fill: rgba(255, 255, 255, 0.78);
+}
+
+.dg-label {
+  font: 11px var(--font-primary);
+  fill: #5b6773;
+}
+
+.dg-label--hl {
+  fill: #00806f;
+  font-weight: 700;
+}
+
+.dg-lane {
+  font: 700 11px var(--font-primary);
+  letter-spacing: 0.1em;
+  fill: #7a8794;
+}
+
+.dg-edge {
+  fill: none;
+  stroke: #7a8794;
+  stroke-width: 1.5;
+}
+
+.dg-edge--return {
+  stroke-dasharray: 5 4;
+}
+
+.dg-edge--hl {
+  stroke: var(--secondary-color);
+  stroke-width: 2.5;
+}
+
+.dg-lifeline {
+  stroke: #c5ccd3;
+  stroke-dasharray: 3 4;
+}
+
+.dg-arrow {
+  fill: #7a8794;
+}
+
+.dg-arrow--hl {
+  fill: var(--secondary-color);
 }
