@@ -1,0 +1,414 @@
+/*
+ * Case-study pages (projects/*.html). Loaded after style.css and reuses its
+ * variables. Everything is scoped to .cs-* and .dg-* classes so the home page
+ * is unaffected.
+ */
+
+/* -------------------------------------------------- */
+/* Top bar (reuses the home nav in its scrolled state) */
+/* -------------------------------------------------- */
+
+nav .cs-back {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+nav .cs-back:hover,
+nav .cs-back:focus-visible {
+  color: var(--secondary-color);
+}
+
+/* -------------------------------------------------- */
+/* Layout: sticky table of contents + article column   */
+/* -------------------------------------------------- */
+
+.cs-layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 112px 16px 80px;
+}
+
+.cs-toc {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .cs-layout {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 56px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .cs-toc {
+    display: block;
+    position: sticky;
+    top: 96px;
+    align-self: start;
+  }
+}
+
+.cs-toc ol {
+  list-style: none;
+  border-left: 1px solid rgba(13, 37, 63, 0.12);
+}
+
+.cs-toc a {
+  display: block;
+  padding: 6px 0 6px 14px;
+  font-size: 0.85rem;
+  color: #5b6773;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.cs-toc a:hover,
+.cs-toc a:focus-visible {
+  color: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
+/* Article typography                                  */
+/* -------------------------------------------------- */
+
+.cs-article {
+  min-width: 0;
+}
+
+/* Undo the home page's centred, padded <section> defaults */
+.cs-article > section,
+.cs-hero {
+  padding: 0;
+  max-width: none;
+  margin: 0 0 72px;
+  scroll-margin-top: 88px;
+}
+
+.cs-article p,
+.cs-article ol,
+.cs-article ul,
+.cs-article dl {
+  max-width: 70ch;
+}
+
+.cs-article p {
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+
+.cs-article h2 {
+  text-align: left;
+  font-size: 1.6rem;
+  color: var(--primary-color);
+  margin-bottom: 24px;
+}
+
+.cs-article h2::after {
+  margin: 10px 0 0;
+}
+
+.cs-article h3 {
+  font-size: 1.15rem;
+  color: var(--primary-color);
+  margin: 48px 0 16px;
+  scroll-margin-top: 88px;
+}
+
+.cs-article code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.88em;
+  background: rgba(13, 37, 63, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.cs-article a {
+  color: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
+/* Hero and TL;DR                                      */
+/* -------------------------------------------------- */
+
+.cs-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #00806f;
+  margin-bottom: 8px;
+}
+
+.cs-hero h1 {
+  font-size: 2.6rem;
+  line-height: 1.15;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+}
+
+.cs-article .cs-lede {
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.cs-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+  margin: 28px 0;
+}
+
+.cs-meta dt,
+.cs-tldr dt,
+.cs-adr dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7a8794;
+}
+
+.cs-meta dd {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.cs-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.cs-links a {
+  padding: 8px 18px;
+  border: 1px solid var(--primary-color);
+  border-radius: 999px;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background 0.3s, color 0.3s;
+}
+
+.cs-links a:hover,
+.cs-links a:focus-visible {
+  background: var(--primary-color);
+  color: #ffffff;
+}
+
+.cs-article .cs-tldr {
+  display: grid;
+  gap: 16px;
+  max-width: none;
+}
+
+@media (min-width: 720px) {
+  .cs-article .cs-tldr {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.cs-tldr > div {
+  background: #ffffff;
+  border-top: 3px solid var(--secondary-color);
+  border-radius: 6px;
+  padding: 16px 18px;
+  box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
+}
+
+.cs-tldr dd {
+  margin-top: 6px;
+  line-height: 1.55;
+}
+
+/* -------------------------------------------------- */
+/* Story blocks: step list, callout, ADR, gotcha, next */
+/* -------------------------------------------------- */
+
+.cs-steps {
+  counter-reset: step;
+  list-style: none;
+  margin: 20px 0 24px;
+}
+
+.cs-steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 5px 0 5px 40px;
+}
+
+.cs-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(13, 37, 63, 0.08);
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.cs-article .cs-callout {
+  border-left: 3px solid var(--secondary-color);
+  background: #ffffff;
+  padding: 14px 18px;
+  font-size: 1.1rem;
+}
+
+.cs-adr {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px 20px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 720px) {
+  .cs-adr {
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+}
+
+.cs-adr dt {
+  padding-top: 4px;
+}
+
+.cs-adr dd {
+  margin-bottom: 12px;
+  line-height: 1.65;
+}
+
+.cs-gotcha {
+  max-width: 70ch;
+  background: #fff8e6;
+  border: 1px solid #f0d58a;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 24px 0;
+}
+
+.cs-gotcha h4 {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a6100;
+  margin-bottom: 8px;
+}
+
+.cs-gotcha ul {
+  padding-left: 18px;
+}
+
+.cs-gotcha li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+.cs-next {
+  list-style: none;
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 720px) {
+  .cs-article .cs-next {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: none;
+  }
+}
+
+.cs-next li {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
+}
+
+.cs-next h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.cs-next p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.cs-end {
+  border-top: 1px solid rgba(13, 37, 63, 0.12);
+  padding-top: 24px;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------- */
+/* Figures: diagrams and screenshots                   */
+/* -------------------------------------------------- */
+
+.cs-figure {
+  margin: 32px 0 40px;
+}
+
+/* Wide diagrams scroll inside the figure on phones instead of shrinking
+   their text below readable size or widening the page */
+.cs-figure__scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cs-figure svg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+}
+
+.cs-figure figcaption {
+  max-width: 70ch;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #5b6773;
+}
+
+.cs-shots {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 720px) {
+  .cs-shots {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cs-shots img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(13, 37, 63, 0.15);
+}
+
+/* -------------------------------------------------- */
+/* Small screens                                       */
+/* -------------------------------------------------- */
+
+@media (max-width: 590px) {
+  .cs-hero h1 {
+    font-size: 2rem;
+  }
+
+  .cs-article .cs-lede {
+    font-size: 1.1rem;
+  }
+}

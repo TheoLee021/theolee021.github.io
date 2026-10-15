@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ucsd-study-room · Theo Lee</title>
+  <meta name="description" content="Case study: a CLI, MCP server and Claude Code plugin that books UCSD study rooms by driving the booking site with Playwright.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="ucsd-study-room · Theo Lee">
+  <meta property="og:description" content="Book a UCSD study room by just asking your AI assistant.">
+  <meta property="og:url" content="https://theolee021.github.io/projects/ucsd-study-room.html">
+  <meta property="og:image" content="https://theolee021.github.io/assets/images/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/case-study.css">
+</head>
+<body>
+  <!-- Same fixed bar as the home page, always in its scrolled (solid) state -->
+  <nav class="nav--scrolled" aria-label="Site">
+    <a href="../index.html" class="logo">THEO</a>
+    <a href="../index.html#projects" class="cs-back">&larr; All projects</a>
+  </nav>
+
+  <main class="cs-layout">
+    <aside class="cs-toc" aria-label="On this page">
+      <ol>
+        <li><a href="#tldr">TL;DR</a></li>
+        <li><a href="#why">Why I built this</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#decisions">Key decisions</a></li>
+        <li><a href="#in-use">In use</a></li>
+        <li><a href="#next">What's next</a></li>
+      </ol>
+    </aside>
+
+    <article class="cs-article">
+      <!-- A div, not <header>: style.css turns every <header> into the full-height home hero -->
+      <div class="cs-hero">
+        <p class="cs-eyebrow">Case Study</p>
+        <h1>ucsd-study-room</h1>
+        <p class="cs-lede">Book a UCSD study room by just asking your AI assistant.</p>
+        <dl class="cs-meta">
+          <div><dt>Role</dt><dd>Solo developer</dd></div>
+          <div><dt>Timeline</dt><dd>Mar 2026 – present</dd></div>
+          <div><dt>Stack</dt><dd>Python · Playwright · MCP · PyPI</dd></div>
+        </dl>
+        <div class="cs-links">
+          <a href="https://github.com/TheoLee021/ucsd-study-room" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://pypi.org/project/ucsd-study-room/" target="_blank" rel="noopener noreferrer">PyPI</a>
+          <a href="https://github.com/TheoLee021/ucsd-study-room-plugin" target="_blank" rel="noopener noreferrer">Claude Code plugin</a>
+        </div>
+      </div>
+
+      <section id="tldr" aria-labelledby="tldr-h">
+        <h2 id="tldr-h">TL;DR</h2>
+        <dl class="cs-tldr">
+          <div>
+            <dt>Problem</dt>
+            <dd>Booking a Price Center study room means finding a hard-to-find site called T-RES, then clicking through about ten steps.</dd>
+          </div>
+          <div>
+            <dt>Solution</dt>
+            <dd>A Python tool that drives the booking site with a real browser, exposed as a CLI, an MCP server and a Claude Code plugin.</dd>
+          </div>
+          <div>
+            <dt>Result</dt>
+            <dd>One sentence to book. Search, book, list and cancel work from the terminal or any MCP client, published on PyPI.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="why" aria-labelledby="why-h">
+        <h2 id="why-h">Why I built this</h2>
+      </section>
+
+      <section id="architecture" aria-labelledby="architecture-h">
+        <h2 id="architecture-h">Architecture at a glance</h2>
+      </section>
+
+      <section id="decisions" aria-labelledby="decisions-h">
+        <h2 id="decisions-h">Key decisions</h2>
+      </section>
+
+      <section id="in-use" aria-labelledby="in-use-h">
+        <h2 id="in-use-h">In use</h2>
+      </section>
+
+      <section id="next" aria-labelledby="next-h">
+        <h2 id="next-h">What's next</h2>
+      </section>
+
+      <p class="cs-end"><a href="../index.html#projects">&larr; All projects</a></p>
+    </article>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Theo Lee. All rights reserved.</p>
+  </footer>
+</body>
+</html>
