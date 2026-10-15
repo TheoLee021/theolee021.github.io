@@ -284,6 +284,67 @@
           <dt>Result</dt>
           <dd>A Python change needs only a PyPI release. A skill or config change needs a plugin push plus a marketplace version bump. CLI users get a once-a-day update notice and a <code>study-room update</code> command.</dd>
         </dl>
+        <figure class="cs-figure">
+          <div class="cs-figure__scroll">
+            <svg viewBox="0 0 880 384" role="img" aria-labelledby="dg3-title dg3-desc">
+              <title id="dg3-title">How updates reach users</title>
+              <desc id="dg3-desc">Python code: the ucsd-study-room repository publishes to PyPI, and uvx on the user's machine resolves the latest release. Skills and config: the claude-plugins marketplace points to the ucsd-study-room-plugin repository; Claude Code clones the plugin into its cache and refreshes it when the marketplace version is bumped. The cached plugin's .mcp.json runs uvx --refresh.</desc>
+              <defs>
+                <marker id="dg3-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="dg-arrow" d="M0 0L10 5L0 10z"/>
+                </marker>
+                <marker id="dg3-arrow-hl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path class="dg-arrow--hl" d="M0 0L10 5L0 10z"/>
+                </marker>
+              </defs>
+
+              <!-- User's machine -->
+              <rect class="dg-frame" x="580" y="16" width="280" height="356" rx="10"/>
+              <text class="dg-lane" x="600" y="36">USER'S MACHINE</text>
+
+              <!-- Lane A: Python code -->
+              <text class="dg-lane" x="40" y="36">PYTHON CODE</text>
+              <rect class="dg-box" x="40" y="52" width="210" height="56" rx="8"/>
+              <text class="dg-title" x="145" y="76" text-anchor="middle">ucsd-study-room</text>
+              <text class="dg-sub" x="145" y="95" text-anchor="middle">Python package</text>
+              <rect class="dg-box dg-box--ext" x="330" y="52" width="180" height="56" rx="8"/>
+              <text class="dg-title" x="420" y="76" text-anchor="middle">PyPI</text>
+              <text class="dg-sub" x="420" y="95" text-anchor="middle">ucsd-study-room</text>
+              <rect class="dg-box" x="600" y="52" width="240" height="56" rx="8"/>
+              <text class="dg-title" x="720" y="76" text-anchor="middle">uvx / uv tool</text>
+              <text class="dg-sub" x="720" y="95" text-anchor="middle">daily update check</text>
+              <path class="dg-edge dg-edge--hl" d="M250 80H330" marker-end="url(#dg3-arrow-hl)"/>
+              <text class="dg-label dg-label--hl" x="290" y="72" text-anchor="middle">publish</text>
+              <path class="dg-edge dg-edge--hl" d="M510 80H600" marker-end="url(#dg3-arrow-hl)"/>
+              <text class="dg-label dg-label--hl" x="572" y="72" text-anchor="end">resolve latest</text>
+
+              <!-- Lane B: skills and config -->
+              <text class="dg-lane" x="40" y="184">SKILLS &amp; CONFIG</text>
+              <rect class="dg-box" x="40" y="200" width="210" height="56" rx="8"/>
+              <text class="dg-title" x="145" y="224" text-anchor="middle">ucsd-study-room-plugin</text>
+              <text class="dg-sub" x="145" y="243" text-anchor="middle">skill · .mcp.json</text>
+              <rect class="dg-box" x="40" y="296" width="210" height="56" rx="8"/>
+              <text class="dg-title" x="145" y="320" text-anchor="middle">claude-plugins</text>
+              <text class="dg-sub" x="145" y="339" text-anchor="middle">marketplace.json · version</text>
+              <path class="dg-edge" d="M145 296V256" marker-end="url(#dg3-arrow)"/>
+              <text class="dg-label" x="155" y="281">source url</text>
+
+              <rect class="dg-box" x="600" y="248" width="240" height="56" rx="8"/>
+              <text class="dg-title" x="720" y="272" text-anchor="middle">Claude Code plugin cache</text>
+              <text class="dg-sub" x="720" y="291" text-anchor="middle">refreshes on version bump</text>
+              <path class="dg-edge" d="M250 228C420 228 430 270 600 270" marker-end="url(#dg3-arrow)"/>
+              <text class="dg-label" x="420" y="236" text-anchor="middle">git clone</text>
+              <path class="dg-edge" d="M250 324C420 324 430 290 600 290" marker-end="url(#dg3-arrow)"/>
+              <text class="dg-label" x="420" y="330" text-anchor="middle">version bump</text>
+
+              <!-- The plugin starts the Python package -->
+              <path class="dg-edge" d="M720 248V108" marker-end="url(#dg3-arrow)"/>
+              <text class="dg-label" x="730" y="174">runs</text>
+              <text class="dg-label" x="730" y="188">uvx --refresh</text>
+            </svg>
+          </div>
+          <figcaption>Two update paths. Python code reaches users through PyPI; skills and config reach them through a marketplace version bump.</figcaption>
+        </figure>
         <aside class="cs-gotcha">
           <h4>Gotchas I hit</h4>
           <ul>
