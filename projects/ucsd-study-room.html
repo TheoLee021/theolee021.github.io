@@ -180,6 +180,89 @@
           <dt>Trade-off</dt>
           <dd>Every command launches a browser, so it is slower than a raw HTTP call, and a T-RES redesign can break selectors. In exchange I never replicate the SAML redirects or the Duo flow, and the tool behaves exactly like a logged-in student.</dd>
         </dl>
+        <figure class="cs-figure">
+          <div class="cs-figure__scroll">
+            <svg viewBox="0 0 880 640" role="img" aria-labelledby="dg2-title dg2-desc">
+              <title id="dg2-title">Login and booking sequence</title>
+              <desc id="dg2-desc">When the saved session is valid, study-room loads it, launches headless Chrome, searches and books on T-RES and returns the confirmation. When SSO has expired, it launches a visible Chrome window, submits the keyring credentials to UCSD SSO, Duo sends a push that the user approves within 60 seconds, Duo redirects back to T-RES, the new storage state is saved and the original request is retried.</desc>
+              <defs>
+                <marker id="dg2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="dg-arrow" d="M0 0L10 5L0 10z"/>
+                </marker>
+                <marker id="dg2-arrow-hl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path class="dg-arrow--hl" d="M0 0L10 5L0 10z"/>
+                </marker>
+              </defs>
+
+              <!-- Participants -->
+              <rect class="dg-box" x="15" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="75" y="31" text-anchor="middle">User</text>
+              <text class="dg-sub" x="75" y="47" text-anchor="middle">AI client or CLI</text>
+              <rect class="dg-box dg-box--core" x="165" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title dg-on-dark" x="225" y="31" text-anchor="middle">study-room</text>
+              <text class="dg-sub dg-on-dark" x="225" y="47" text-anchor="middle">core</text>
+              <rect class="dg-box" x="315" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="375" y="31" text-anchor="middle">Chrome</text>
+              <text class="dg-sub" x="375" y="47" text-anchor="middle">Playwright</text>
+              <rect class="dg-box dg-box--ext" x="465" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="525" y="31" text-anchor="middle">UCSD SSO</text>
+              <text class="dg-sub" x="525" y="47" text-anchor="middle">SAML</text>
+              <rect class="dg-box dg-box--ext" x="615" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="675" y="31" text-anchor="middle">Duo</text>
+              <text class="dg-sub" x="675" y="47" text-anchor="middle">2FA</text>
+              <rect class="dg-box dg-box--ext" x="745" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="805" y="31" text-anchor="middle">T-RES</text>
+              <text class="dg-sub" x="805" y="47" text-anchor="middle">EMS Cloud</text>
+
+              <!-- Lifelines -->
+              <path class="dg-lifeline" d="M75 56V632"/>
+              <path class="dg-lifeline" d="M225 56V632"/>
+              <path class="dg-lifeline" d="M375 56V632"/>
+              <path class="dg-lifeline" d="M525 56V632"/>
+              <path class="dg-lifeline" d="M675 56V632"/>
+              <path class="dg-lifeline" d="M805 56V632"/>
+
+              <!-- Fast path -->
+              <rect class="dg-frame" x="12" y="72" width="856" height="226" rx="6"/>
+              <rect class="dg-tab" x="12" y="72" width="170" height="22" rx="6"/>
+              <text class="dg-label" x="22" y="87">session valid (&lt; 7 days)</text>
+
+              <path class="dg-edge" d="M75 112H225" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="150" y="105" text-anchor="middle">book_room(…)</text>
+              <path class="dg-edge" d="M225 140h34v14h-34" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="266" y="151">load saved session</text>
+              <path class="dg-edge" d="M225 184H375" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="300" y="177" text-anchor="middle">launch headless</text>
+              <path class="dg-edge" d="M375 222H805" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="600" y="215" text-anchor="middle">search, then book</text>
+              <path class="dg-edge dg-edge--return" d="M805 256H375" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="600" y="249" text-anchor="middle">confirmation</text>
+              <path class="dg-edge dg-edge--return" d="M225 284H75" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="150" y="277" text-anchor="middle">Booked ✓</text>
+
+              <!-- Slow path: re-login -->
+              <rect class="dg-frame dg-frame--hl" x="12" y="314" width="856" height="306" rx="6"/>
+              <rect class="dg-tab" x="12" y="314" width="190" height="22" rx="6"/>
+              <text class="dg-label dg-label--hl" x="22" y="329">SSO expired → re-login</text>
+
+              <path class="dg-edge" d="M225 356H375" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="300" y="349" text-anchor="middle">launch visible Chrome</text>
+              <path class="dg-edge" d="M375 394H525" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="450" y="387" text-anchor="middle">credentials (keyring)</text>
+              <path class="dg-edge" d="M525 432H675" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="600" y="425" text-anchor="middle">push</text>
+              <path class="dg-edge dg-edge--hl" d="M675 478H75" marker-end="url(#dg2-arrow-hl)"/>
+              <text class="dg-label dg-label--hl" x="375" y="469" text-anchor="middle">approve on your phone · waits up to 60 s</text>
+              <path class="dg-edge dg-edge--return" d="M675 522H375" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="600" y="515" text-anchor="middle">redirect to T-RES</text>
+              <path class="dg-edge dg-edge--return" d="M375 560H225" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="300" y="553" text-anchor="middle">save storage_state</text>
+              <path class="dg-edge dg-edge--hl" d="M225 592h34v14h-34" marker-end="url(#dg2-arrow-hl)"/>
+              <text class="dg-label dg-label--hl" x="266" y="603">retry the original request</text>
+            </svg>
+          </div>
+          <figcaption>The fast path reuses a saved session. When SSO expires, a visible Chrome window opens, fills in credentials from the OS keyring and waits for Duo, then the original request runs again.</figcaption>
+        </figure>
         <p>Credentials go into the OS keyring (macOS Keychain, Windows Credential Locker, Linux Secret Service), never a plain file. A saved session is trusted for seven days. If the site bounces a request back to SSO sooner, the tool opens Chrome, fills in the stored credentials, waits for Duo, and retries the same request instead of failing.</p>
 
         <h3 id="decision-core">2. One core, many interfaces</h3>
