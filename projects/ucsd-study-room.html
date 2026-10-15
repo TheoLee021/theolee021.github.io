@@ -72,22 +72,100 @@
 
       <section id="why" aria-labelledby="why-h">
         <h2 id="why-h">Why I built this</h2>
+        <p>I spend a lot of time in the Price Center study rooms, and people walking by kept stopping to ask me the same thing: how do you book one of these?</p>
+        <p>The honest answer was not short. The rooms are booked through a site called T-RES, and searching “ucsd study room” rarely gets you there. You have to dig. Once you find it, this is the path:</p>
+        <ol class="cs-steps">
+          <li>Log in with UCSD SSO and approve Duo</li>
+          <li>Click <em>Book Now</em></li>
+          <li>Pick a date and a time range</li>
+          <li>Click <em>Search</em></li>
+          <li>Choose an available room</li>
+          <li>Enter the number of attendees and click <em>Add Room</em></li>
+          <li>Click <em>Next Step</em></li>
+          <li>Type your full name twice, then your email</li>
+          <li>Accept the terms</li>
+          <li>Click <em>Create Reservation</em></li>
+        </ol>
+        <p class="cs-callout">What I wanted instead: <strong>“Book a study room tomorrow from 2 to 4pm.”</strong></p>
       </section>
 
       <section id="architecture" aria-labelledby="architecture-h">
         <h2 id="architecture-h">Architecture at a glance</h2>
+        <p id="architecture-text">All of the logic lives in one core package. <code>auth</code> handles SSO and the saved session, <code>booking</code> drives the T-RES pages, <code>config</code> stores your name and email, and <code>updater</code> checks PyPI for new releases. The CLI and the MCP server only translate input and output. The Claude Code plugin contains no Python at all: it is a skill plus an <code>.mcp.json</code> that starts the MCP server with <code>uvx</code>.</p>
+        <p>Keeping the interfaces thin pays off with every feature. Cancellation, for example, was written once in <code>booking.py</code> and wired into both the CLI and the MCP server in the same change.</p>
       </section>
 
       <section id="decisions" aria-labelledby="decisions-h">
         <h2 id="decisions-h">Key decisions</h2>
+
+        <h3 id="decision-browser">1. No API, so drive a real browser</h3>
+        <dl class="cs-adr">
+          <dt>Context</dt>
+          <dd>T-RES has no public API, and every request sits behind UCSD’s SAML single sign-on plus a Duo Push second factor.</dd>
+          <dt>Options</dt>
+          <dd>Reverse-engineer the HTTP requests and replay them, or drive a real browser the way a person would.</dd>
+          <dt>Decision</dt>
+          <dd>Drive real Chrome with Playwright. Login happens once in a visible window so the user can approve Duo. The resulting storage state (cookies plus local and session storage) is saved and reused by headless Chrome for every search and booking.</dd>
+          <dt>Trade-off</dt>
+          <dd>Every command launches a browser, so it is slower than a raw HTTP call, and a T-RES redesign can break selectors. In exchange I never replicate the SAML redirects or the Duo flow, and the tool behaves exactly like a logged-in student.</dd>
+        </dl>
+        <p>Credentials go into the OS keyring (macOS Keychain, Windows Credential Locker, Linux Secret Service), never a plain file. A saved session is trusted for seven days. If the site bounces a request back to SSO sooner, the tool opens Chrome, fills in the stored credentials, waits for Duo, and retries the same request instead of failing.</p>
+
+        <h3 id="decision-core">2. One core, many interfaces</h3>
+        <dl class="cs-adr">
+          <dt>Context</dt>
+          <dd>The first release was a CLI and an MCP server whose tool descriptions and responses were written in Korean, with setup docs aimed at Claude Code.</dd>
+          <dt>Decision</dt>
+          <dd>Two days later I made the MCP server client-agnostic: English descriptions and responses, a <code>study-room-mcp</code> entry point that <code>uvx</code> can run without a manual install, and setup docs that work for Codex CLI, Gemini CLI and Cursor too.</dd>
+          <dt>Result</dt>
+          <dd>The same five tools (<code>search_rooms</code>, <code>book_room</code>, <code>my_events</code>, <code>cancel_reservation</code>, <code>login</code>) work in any MCP client, and the CLI exposes the same core through seven commands. The architecture diagram above shows the split.</dd>
+        </dl>
+
+        <h3 id="decision-shipping">3. Shipping to two worlds</h3>
+        <dl class="cs-adr">
+          <dt>Context</dt>
+          <dd>People install this either as a Python tool or as a Claude Code plugin. Both should stay current without the user doing anything.</dd>
+          <dt>Decision</dt>
+          <dd>Split the project into three repositories by what changes. <code>ucsd-study-room</code> holds the Python code and ships to PyPI. <code>ucsd-study-room-plugin</code> holds the skill and <code>.mcp.json</code>. <code>claude-plugins</code> is the marketplace that lists the plugin and its version. The plugin’s <code>.mcp.json</code> runs <code>uvx --refresh</code>, so every MCP start resolves the newest release from PyPI.</dd>
+          <dt>Result</dt>
+          <dd>A Python change needs only a PyPI release. A skill or config change needs a plugin push plus a marketplace version bump. CLI users get a once-a-day update notice and a <code>study-room update</code> command.</dd>
+        </dl>
+        <aside class="cs-gotcha">
+          <h4>Gotchas I hit</h4>
+          <ul>
+            <li>A plugin only loads when the repository root is the plugin root. I first kept it in a <code>plugin/</code> folder inside the main repo, and Claude Code could not find the skill.</li>
+            <li>Claude Code caches plugins by marketplace version. Pushing to the plugin repo changes nothing for users until the version in <code>marketplace.json</code> goes up.</li>
+            <li>The marketplace source type is <code>"url"</code> with a full <code>.git</code> URL, not <code>"github"</code>.</li>
+          </ul>
+        </aside>
       </section>
 
       <section id="in-use" aria-labelledby="in-use-h">
         <h2 id="in-use-h">In use</h2>
+        <p id="in-use-text">Right now a friend uses it regularly to book rooms. It is a small audience, and I would rather say so than round it up.</p>
       </section>
 
       <section id="next" aria-labelledby="next-h">
         <h2 id="next-h">What's next</h2>
+        <p>I still think of this project as unfinished. These are the next steps, in the order I would take them.</p>
+        <ol class="cs-next">
+          <li>
+            <h3>See every open room at a glance</h3>
+            <p>Today you have to name a time before you see anything. A day view of open slots matches how people actually decide: find a gap, then book it.</p>
+          </li>
+          <li>
+            <h3>A gentler login</h3>
+            <p>Login still opens a Chrome window and waits for Duo. That is the price of <a href="#decision-browser">driving a real browser</a>, and it is the biggest hurdle for a first-time user.</p>
+          </li>
+          <li>
+            <h3>Cover more than Price Center</h3>
+            <p>Other study spaces at UCSD are booked on different platforms. Bringing them behind the same core is the step toward one place to book any room on campus.</p>
+          </li>
+          <li>
+            <h3>A web app for everyone at UCSD</h3>
+            <p>Not everyone uses a terminal or an AI assistant. A web front end would be a fourth interface on <a href="#decision-core">the same core</a>, and the core-first structure is what makes that feasible.</p>
+          </li>
+        </ol>
       </section>
 
       <p class="cs-end"><a href="../index.html#projects">&larr; All projects</a></p>
