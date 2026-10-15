@@ -123,9 +123,9 @@
         <div class="project-card" data-project="chopstickstory">
           <img src="assets/images/chopstickstory.webp" alt="Chopstickstory home page with the site navigation and a Discover Korean Culture headline" loading="lazy">
           <h3>Chopstickstory</h3>
-          <p>The public site and internal platform for a Korean cultural nonprofit, live at chopstickstory.org with roughly 1,000 unique visitors a week. Visitors browse programs and register for events, while staff manage reservations, volunteer applications, and work logs from the admin. A Django REST API on Azure App Service serves a React frontend on Cloudflare Pages.</p>
+          <p>The public site and internal platform for a Korean cultural nonprofit, live at chopstickstory.org. Visitors browse programs and register for events, while staff manage reservations, volunteer applications, and work logs from the admin. A Django REST API on Azure App Service serves a React frontend on Cloudflare Pages.</p>
           <div class="project-links">
-            <a href="https://chopstickstory.org" class="project-link" target="_blank" rel="noopener noreferrer">Live Site</a>
+            <a href="https://chopstickstory.org" class="project-link" target="_blank" rel="noopener noreferrer">Live Site<span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
         <div class="project-card">
@@ -133,7 +133,7 @@
           <h3>DATreeMap</h3>
           <p>A Django and PostGIS application serving 2,300+ campus trees on an interactive map for De Anza's Environmental Monitoring Club. REST APIs return GeoJSON over PostGIS spatial queries, with typical queries under 200 ms.</p>
           <div class="project-links">
-            <a href="https://github.com/TheoLee021/DATreeMap" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://github.com/TheoLee021/DATreeMap" class="project-link" target="_blank" rel="noopener noreferrer">GitHub<span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
         <div class="project-card">
@@ -141,7 +141,7 @@
           <h3>AstroSweep</h3>
           <p>A 3D simulation game prototype about space debris cleanup, built with Flask and CesiumJS. Simulates 500 debris objects across three orbital layers using real orbital mechanics. Won 2nd place at DA Hacks 3.0.</p>
           <div class="project-links">
-            <a href="https://github.com/TheoLee021/AstroSweep" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://github.com/TheoLee021/AstroSweep" class="project-link" target="_blank" rel="noopener noreferrer">GitHub<span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
         <div class="project-card">
@@ -149,9 +149,9 @@
           <h3>WatchTower</h3>
           <p>Backend Lead on a 13-person Agile team building a lightweight observability dashboard on Cloudflare Workers and D1. Owned the data model, API contract, and the event-ingestion worker with batch validation, payload size limits, and idempotent inserts.</p>
           <div class="project-links">
-            <a href="https://github.com/cse110-sp26-group7/Watchtower" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://cse110-sp26-group7.github.io/Watchtower/landing/" class="project-link" target="_blank" rel="noopener noreferrer">Landing</a>
-            <a href="https://youtu.be/rJK7l-YkAIY" class="project-link" target="_blank" rel="noopener noreferrer">Demo</a>
+            <a href="https://github.com/cse110-sp26-group7/Watchtower" class="project-link" target="_blank" rel="noopener noreferrer">GitHub<span class="arrow" aria-hidden="true">&#8599;</span></a>
+            <a href="https://cse110-sp26-group7.github.io/Watchtower/landing/" class="project-link" target="_blank" rel="noopener noreferrer">Landing<span class="arrow" aria-hidden="true">&#8599;</span></a>
+            <a href="https://youtu.be/rJK7l-YkAIY?si=hnxTpk_2eZT9fHYv&amp;t=55" class="project-link" target="_blank" rel="noopener noreferrer">Demo<span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
         <div class="project-card">
@@ -159,8 +159,8 @@
           <h3>ucsd-study-room</h3>
           <p>An open-source CLI tool and MCP server published to PyPI that automates UCSD study room search and booking through headless Chrome, handling SAML SSO and Duo Push 2FA with OS-native keychain credential storage.</p>
           <div class="project-links">
-            <a href="https://github.com/TheoLee021/ucsd-study-room" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://pypi.org/project/ucsd-study-room/" class="project-link" target="_blank" rel="noopener noreferrer">PyPI</a>
+            <a href="https://github.com/TheoLee021/ucsd-study-room" class="project-link" target="_blank" rel="noopener noreferrer">GitHub<span class="arrow" aria-hidden="true">&#8599;</span></a>
+            <a href="https://pypi.org/project/ucsd-study-room/" class="project-link" target="_blank" rel="noopener noreferrer">PyPI<span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
         <div class="project-card">
@@ -168,7 +168,7 @@
           <h3>PyBlender-Agent</h3>
           <p>An AI agent that generates Blender procedural materials from natural language. A RAG pipeline retrieves Blender's Python API documentation from a vector database, and MCP JSON-RPC connects the agent to a headless Blender instance that executes the generated code.</p>
           <div class="project-links">
-            <a href="https://github.com/TheoLee021/PyBlender-Agent-V1" class="project-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://github.com/TheoLee021/PyBlender-Agent-V1" class="project-link" target="_blank" rel="noopener noreferrer">GitHub<span class="arrow" aria-hidden="true">&#8599;</span></a>
           </div>
         </div>
       </div>
@@ -358,14 +358,21 @@
       const originals = Array.from(track.querySelectorAll('.project-card'));
       if (originals.length === 0) return;
 
-      // Duplicate the set so the sequence can wrap without a visible jump.
+      // A copy of the set on each side, so the view can sit on the real cards
+      // with a full set of room either way for a hand swipe.
       // The copies are hidden from assistive tech and skipped by tabbing.
-      originals.forEach((card) => {
-        const clone = card.cloneNode(true);
-        clone.setAttribute('aria-hidden', 'true');
-        clone.querySelectorAll('a').forEach((a) => a.setAttribute('tabindex', '-1'));
-        track.appendChild(clone);
-      });
+      function cloneSet() {
+        const set = document.createDocumentFragment();
+        originals.forEach((card) => {
+          const clone = card.cloneNode(true);
+          clone.setAttribute('aria-hidden', 'true');
+          clone.querySelectorAll('a').forEach((a) => a.setAttribute('tabindex', '-1'));
+          set.appendChild(clone);
+        });
+        return set;
+      }
+      track.insertBefore(cloneSet(), originals[0]);
+      track.appendChild(cloneSet());
 
       // One button per project, built from the card titles so the two stay in sync.
       // They only do anything with JS running, so they are created here.
@@ -388,7 +395,7 @@
       // Each card's centre, measured from the start of the loop.
       let centers = [];
       function measure() {
-        const firstClone = track.querySelectorAll('.project-card')[originals.length];
+        const firstClone = track.querySelectorAll('.project-card')[2 * originals.length];
         loopWidth = firstClone ? firstClone.offsetLeft - originals[0].offsetLeft : 0;
         // Read the centres straight off the layout, in scroll coordinates,
         // so the scroller's own padding needs no correction here.
@@ -412,14 +419,76 @@
       track.addEventListener('mouseleave', resume);
       track.addEventListener('focusin', pause);
       track.addEventListener('focusout', resume);
+      // While a finger is down the browser owns the scroll position.
+      let touching = false;
       track.addEventListener('touchstart', () => {
         paused = true;
+        touching = true;
         clearTimeout(touchPauseTimer);
       }, { passive: true });
       track.addEventListener('touchend', () => {
+        touching = false;
         clearTimeout(touchPauseTimer);
         touchPauseTimer = setTimeout(resume, 1000);
       }, { passive: true });
+      track.addEventListener('touchcancel', () => { touching = false; }, { passive: true });
+
+      // Mouse drag, so desktop gets the same grab-and-fling feel as a phone.
+      // Touch and pen are left to the browser's native scrolling.
+      const DRAG_THRESHOLD = 5; // px of movement before a press becomes a drag
+      let drag = null; // { id, startX, startPos, dragging, samples }
+      let velocity = 0; // px/s, the fling left over after a drag is released
+      let suppressClick = false;
+
+      track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0) return;
+        drag = { id: e.pointerId, startX: e.clientX, startPos: pos, dragging: false, samples: [] };
+        velocity = 0;
+        target = null;
+      });
+      track.addEventListener('pointermove', (e) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        const dx = e.clientX - drag.startX;
+        if (!drag.dragging) {
+          if (Math.abs(dx) < DRAG_THRESHOLD) return;
+          drag.dragging = true;
+          track.setPointerCapture(e.pointerId);
+          track.classList.add('is-dragging');
+        }
+        pos = drag.startPos - dx;
+        drag.samples.push({ t: e.timeStamp, pos });
+        // Only the last moment of the drag matters for the fling.
+        while (drag.samples.length > 2 && e.timeStamp - drag.samples[0].t > 80) drag.samples.shift();
+      });
+      function endDrag(e) {
+        if (!drag || e.pointerId !== drag.id) return;
+        if (drag.dragging) {
+          const s = drag.samples;
+          if (s.length >= 2 && e.timeStamp - s[s.length - 1].t < 80) {
+            const dt = (s[s.length - 1].t - s[0].t) / 1000;
+            if (dt > 0) velocity = (s[s.length - 1].pos - s[0].pos) / dt;
+          }
+          // The click that follows a drag must not open a link.
+          suppressClick = true;
+          setTimeout(() => { suppressClick = false; }, 0);
+          track.classList.remove('is-dragging');
+        }
+        drag = null;
+      }
+      track.addEventListener('pointerup', endDrag);
+      track.addEventListener('pointercancel', endDrag);
+      track.addEventListener('click', (e) => {
+        if (!suppressClick) return;
+        e.preventDefault();
+        e.stopPropagation();
+      }, true);
+      // Images and links would otherwise start a native drag-and-drop.
+      track.addEventListener('dragstart', (e) => e.preventDefault());
+      // Clicking a copy should still follow its link but not move focus
+      // into a card that is hidden from assistive tech.
+      track.addEventListener('mousedown', (e) => {
+        if (e.target.closest('[aria-hidden="true"]')) e.preventDefault();
+      });
 
       // The track wraps, so distances are compared on the shorter way around.
       function shortest(delta) {
@@ -483,22 +552,41 @@
       let last = null;
       // scrollLeft rounds to whole pixels, so a sub-pixel step would be lost
       // every frame. Track the position here and write the accumulated value.
-      let pos = track.scrollLeft;
+      // Start on the real cards in the middle; the view looks the same.
+      let pos = track.scrollLeft + loopWidth;
       let lastApplied = -1;
+      let lastNativeScroll = -Infinity;
 
       function step(now) {
         if (last === null) last = now;
         const dt = (now - last) / 1000;
         last = now;
 
-        // If the reader scrolled by hand, adopt their position and drop
-        // any jump in progress -- they have taken over.
+        // If the reader scrolled by hand (touch, wheel, trackpad), adopt their
+        // position and drop any jump in progress -- they have taken over.
         if (lastApplied >= 0 && Math.abs(track.scrollLeft - lastApplied) > 1) {
           pos = track.scrollLeft;
           target = null;
+          velocity = 0;
+          lastNativeScroll = now;
+          lastApplied = track.scrollLeft;
         }
 
-        if (target !== null) {
+        // Writing scrollLeft mid-gesture or mid-momentum would cut the native
+        // scroll short, so leave it alone until it has settled.
+        if (touching || now - lastNativeScroll < 150) {
+          syncActive();
+          requestAnimationFrame(step);
+          return;
+        }
+
+        if (drag && drag.dragging) {
+          // pos follows the pointer; nothing to add.
+        } else if (Math.abs(velocity) > 5) {
+          // Coast after a mouse fling, slowing the way a touch fling does.
+          pos += velocity * dt;
+          velocity *= Math.exp(-4 * dt);
+        } else if (target !== null) {
           const delta = shortest(target - pos);
           if (reduceMotion.matches || Math.abs(delta) < 0.5) {
             pos = target;
@@ -508,11 +596,20 @@
             pos += delta * (1 - Math.exp(-9 * dt));
           }
         } else if (!paused && !reduceMotion.matches && loopWidth > 0) {
+          velocity = 0;
           pos += SPEED * dt;
         }
+        // Keep the view on the middle (real) set so there is room both ways.
         if (loopWidth > 0) {
-          if (pos >= loopWidth) pos -= loopWidth;
-          if (pos < 0) pos += loopWidth;
+          let shift = 0;
+          while (pos + shift >= 2 * loopWidth) shift -= loopWidth;
+          while (pos + shift < loopWidth) shift += loopWidth;
+          pos += shift;
+          // A drag in progress measures from its start, so move that too.
+          if (shift && drag) {
+            drag.startPos += shift;
+            drag.samples.forEach((s) => { s.pos += shift; });
+          }
         }
 
         track.scrollLeft = pos;
