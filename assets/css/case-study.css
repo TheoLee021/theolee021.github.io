@@ -180,27 +180,24 @@ nav .cs-back:focus-visible {
   color: var(--primary-color);
 }
 
+/* Like the home page's .project-link, but in the darker teal so the text
+   stays readable on the light background */
 .cs-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 14px;
 }
 
-.cs-links a {
-  padding: 8px 18px;
-  border: 1px solid var(--primary-color);
-  border-radius: 999px;
-  color: var(--primary-color);
+.cs-article .cs-links a {
+  color: #00806f;
   text-decoration: none;
-  font-size: 0.85rem;
   font-weight: 600;
-  transition: background 0.3s, color 0.3s;
+  transition: color 0.3s;
 }
 
-.cs-links a:hover,
-.cs-links a:focus-visible {
-  background: var(--primary-color);
-  color: #ffffff;
+.cs-article .cs-links a:hover,
+.cs-article .cs-links a:focus-visible {
+  color: var(--primary-color);
 }
 
 .cs-article .cs-tldr {
@@ -217,14 +214,23 @@ nav .cs-back:focus-visible {
 
 .cs-tldr > div {
   background: #ffffff;
-  border-top: 3px solid var(--secondary-color);
   border-radius: 6px;
   padding: 16px 18px;
   box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
 }
 
+/* A short version of the teal rule under the section headings */
+.cs-tldr dt::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 3px;
+  background: var(--secondary-color);
+  margin-top: 8px;
+}
+
 .cs-tldr dd {
-  margin-top: 6px;
+  margin-top: 10px;
   line-height: 1.55;
 }
 
