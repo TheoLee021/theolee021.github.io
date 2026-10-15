@@ -536,6 +536,21 @@ section h2::after {
   -ms-overflow-style: none;
 }
 
+@media (pointer: fine) {
+  .projects-scroller {
+    cursor: grab;
+  }
+}
+
+.projects-scroller.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.projects-scroller.is-dragging .project-card {
+  pointer-events: none;
+}
+
 .projects-scroller::-webkit-scrollbar {
   display: none;
 }
