@@ -357,7 +357,30 @@
 
       <section id="in-use" aria-labelledby="in-use-h">
         <h2 id="in-use-h">In use</h2>
-        <p id="in-use-text">Right now a friend uses it regularly to book rooms. It is a small audience, and I would rather say so than round it up.</p>
+        <figure class="cs-figure">
+          <div class="cs-term">
+            <div class="cs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>Claude Code</span></div>
+            <pre class="cs-term__chat"><span class="t-l0 t-input">❯ Book a study room next Monday from 2 to 4 pm</span><span class="t-l0 t-gap"><span class="t-ok">●</span> <b>Skill</b>(ucsd-study-room:booking-guide)</span><span class="t-l2 t-dim">⎿  Successfully loaded skill</span><span class="t-l1 t-gap t-dim">Called plugin:ucsd-study-room:study-room</span><span class="t-l0 t-gap"><span class="t-dim">●</span> User answered Claude's questions:</span><span class="t-l2"><span class="t-dim">⎿  · Mon 10/19, 2–4 PM: 4 rooms are open. Which one should I book?</span> → <span class="t-accent">Study Room 3</span></span><span class="t-l1 t-gap t-dim">Called plugin:ucsd-study-room:study-room</span><span class="t-l0 t-gap">● I booked Price Center Study Room 3 for Monday, October 19, from 2 to 4 PM, and the system confirmed it.</span></pre>
+          </div>
+          <figcaption>One sentence in Claude Code: it finds the open rooms, asks which one, then books it.</figcaption>
+        </figure>
+        <figure class="cs-figure">
+          <div class="cs-term">
+            <div class="cs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>Terminal</span></div>
+            <pre class="cs-term__table"><span class="t-ok">$</span> <span class="t-input">study-room search --date 2026-10-19 --start 14:00 --end 16:00</span>
+Authenticating via SAML...
+Authentication complete.
+<i> Available Rooms (Price Center)</i>
+┏━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ <b>#</b> ┃ <b>Room</b>                      ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ <span class="t-cyan">1</span> │ <span class="t-ok">Price Center Study Room 2</span> │
+│ <span class="t-cyan">2</span> │ <span class="t-ok">Price Center Study Room 4</span> │
+│ <span class="t-cyan">3</span> │ <span class="t-ok">Price Center Study Room 5</span> │
+└───┴───────────────────────────┘</pre>
+          </div>
+          <figcaption>The same Monday 2–4 pm search from the CLI, after the booking. Study Room 3 is no longer listed.</figcaption>
+        </figure>
       </section>
 
       <section id="next" aria-labelledby="next-h">

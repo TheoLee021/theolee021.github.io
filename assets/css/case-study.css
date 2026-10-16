@@ -453,24 +453,6 @@ nav .cs-back:focus-visible {
   color: #5b6773;
 }
 
-.cs-shots {
-  display: grid;
-  gap: 16px;
-}
-
-@media (min-width: 720px) {
-  .cs-shots {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.cs-shots img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 1px 6px rgba(13, 37, 63, 0.15);
-}
 
 /* -------------------------------------------------- */
 /* Small screens                                       */
@@ -583,4 +565,104 @@ nav .cs-back:focus-visible {
 
 .dg-arrow--hl {
   fill: var(--secondary-color);
+}
+
+/* -------------------------------------------------- */
+/* Terminal windows: real text, not screenshots        */
+/* -------------------------------------------------- */
+
+/* Same palette as the terminal capture on the home page's project card */
+.cs-term {
+  background: #1e1e2e;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(13, 37, 63, 0.18);
+  color: #cdd6f4;
+  font-family: "SF Mono", ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.cs-term__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #181825;
+}
+
+.cs-term__bar i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #45475a;
+}
+
+.cs-term__bar span {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #7f849c;
+}
+
+.cs-term pre {
+  margin: 0;
+  padding: 18px 22px 20px;
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.cs-term b {
+  color: #ffffff;
+}
+
+.cs-term .t-input {
+  color: #ffffff;
+}
+
+.cs-term .t-dim {
+  color: #9399b2;
+}
+
+.cs-term .t-ok {
+  color: #a6e3a1;
+}
+
+.cs-term .t-accent {
+  color: #89b4fa;
+}
+
+/* Chat transcript: one block per line, so a wrapped line stays indented
+   under its own text the way the terminal shows it */
+.cs-term__chat > span {
+  display: block;
+}
+
+.cs-term .t-gap {
+  margin-top: 1.6em;
+}
+
+.cs-term .t-l0 {
+  padding-left: 2ch;
+  text-indent: -2ch;
+}
+
+.cs-term .t-l1 {
+  padding-left: 2ch;
+}
+
+.cs-term .t-l2 {
+  padding-left: 5ch;
+  text-indent: -3ch;
+}
+
+.cs-term .t-cyan {
+  color: #89dceb;
+}
+
+/* Box-drawing tables need tight lines or their borders break apart */
+.cs-term pre.cs-term__table {
+  line-height: 1.3;
+  white-space: pre;
+  overflow-x: auto;
 }
