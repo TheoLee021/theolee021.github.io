@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ucsd-study-room · Theo Lee</title>
+  <meta name="description" content="Case study: a CLI, MCP server and Claude Code plugin that books UCSD study rooms by driving the booking site with Playwright.">
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="ucsd-study-room · Theo Lee">
+  <meta property="og:description" content="Book a UCSD study room by just asking your AI assistant.">
+  <meta property="og:url" content="https://theolee021.github.io/projects/ucsd-study-room/">
+  <meta property="og:image" content="https://theolee021.github.io/assets/images/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/case-study.css">
+</head>
+<body>
+  <!-- Same fixed bar as the home page, always in its scrolled (solid) state -->
+  <nav class="nav--scrolled" aria-label="Site">
+    <a href="../../index.html" class="logo">THEO</a>
+    <a href="../../index.html#projects" class="cs-back">&larr; All projects</a>
+  </nav>
+
+  <main class="cs-layout">
+    <aside class="cs-toc" aria-label="On this page">
+      <ol>
+        <li><a href="#tldr">TL;DR</a></li>
+        <li><a href="#why">Why I built this</a></li>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#decisions">Key decisions</a></li>
+        <li><a href="#in-use">In use</a></li>
+        <li><a href="#next">What's next</a></li>
+      </ol>
+    </aside>
+
+    <article class="cs-article">
+      <!-- A div, not <header>: style.css turns every <header> into the full-height home hero -->
+      <div class="cs-hero">
+        <p class="cs-eyebrow">Case Study</p>
+        <h1>ucsd-study-room</h1>
+        <p class="cs-lede">Book a UCSD study room by just asking your AI assistant.</p>
+        <dl class="cs-meta">
+          <div><dt>Role</dt><dd>Solo developer</dd></div>
+          <div><dt>Timeline</dt><dd>Mar 2026 – present</dd></div>
+          <div><dt>Stack</dt><dd>Python · Playwright · MCP · PyPI</dd></div>
+        </dl>
+        <div class="cs-links">
+          <a href="https://github.com/TheoLee021/ucsd-study-room" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://pypi.org/project/ucsd-study-room/" target="_blank" rel="noopener noreferrer">PyPI</a>
+          <a href="https://github.com/TheoLee021/ucsd-study-room-plugin" target="_blank" rel="noopener noreferrer">Claude Code plugin</a>
+        </div>
+      </div>
+
+      <section id="tldr" aria-labelledby="tldr-h">
+        <h2 id="tldr-h">TL;DR</h2>
+        <dl class="cs-tldr">
+          <div>
+            <dt>Problem</dt>
+            <dd>Booking a Price Center study room means finding a hard-to-find site called <span style="white-space: nowrap">T-RES</span>, then clicking through about ten steps.</dd>
+          </div>
+          <div>
+            <dt>Solution</dt>
+            <dd>A Python tool that drives the booking site with a real browser, exposed as a CLI, an MCP server and a Claude Code plugin.</dd>
+          </div>
+          <div>
+            <dt>Result</dt>
+            <dd>One sentence to book. Search, book, list and cancel work from the terminal or any MCP client, published on PyPI.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="why" aria-labelledby="why-h">
+        <h2 id="why-h">Why I built this</h2>
+        <p>I spend a lot of time in the Price Center study rooms, and people walking by kept stopping to ask me the same thing: how do you book one of these?</p>
+        <p>The honest answer was not short. The rooms are booked through a site called T-RES, and searching “ucsd study room” rarely gets you there. You have to dig. Once you find it, this is the path:</p>
+        <ol class="cs-steps">
+          <li>Log in with UCSD SSO and approve Duo</li>
+          <li>Click <em>Book Now</em></li>
+          <li>Pick a date and a time range</li>
+          <li>Click <em>Search</em></li>
+          <li>Choose an available room</li>
+          <li>Enter the number of attendees and click <em>Add Room</em></li>
+          <li>Click <em>Next Step</em></li>
+          <li>Type your full name twice, then your email</li>
+          <li>Accept the terms</li>
+          <li>Click <em>Create Reservation</em></li>
+        </ol>
+        <p class="cs-callout">What I wanted instead: <strong>“Book a study room tomorrow from 2 to 4pm.”</strong></p>
+      </section>
+
+      <section id="architecture" aria-labelledby="architecture-h">
+        <h2 id="architecture-h">Architecture at a glance</h2>
+        <figure class="cs-figure">
+          <div class="cs-figure__scroll">
+            <svg viewBox="0 0 880 416" role="img" aria-labelledby="dg1-title dg1-desc">
+              <title id="dg1-title">ucsd-study-room architecture</title>
+              <desc id="dg1-desc">Claude Code, other MCP clients and the terminal reach the tool through a Claude Code plugin, an MCP server and a CLI. The plugin starts the MCP server. The MCP server and the CLI share one core package, which reaches UCSD SSO, Duo and T-RES through Playwright and keeps credentials in the OS keyring and the session in the study-room home folder.</desc>
+              <defs>
+                <marker id="dg1-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="dg-arrow" d="M0 0L10 5L0 10z"/>
+                </marker>
+              </defs>
+
+              <!-- Clients -->
+              <rect class="dg-box dg-box--ext" x="40" y="20" width="220" height="44" rx="8"/>
+              <text class="dg-title" x="150" y="47" text-anchor="middle">Claude Code</text>
+              <rect class="dg-box dg-box--ext" x="330" y="20" width="220" height="44" rx="8"/>
+              <text class="dg-title" x="440" y="47" text-anchor="middle">Codex · Gemini · Cursor</text>
+              <rect class="dg-box dg-box--ext" x="620" y="20" width="220" height="44" rx="8"/>
+              <text class="dg-title" x="730" y="47" text-anchor="middle">Terminal</text>
+
+              <!-- Interfaces -->
+              <rect class="dg-box" x="40" y="124" width="220" height="56" rx="8"/>
+              <text class="dg-title" x="150" y="148" text-anchor="middle">Claude Code plugin</text>
+              <text class="dg-sub" x="150" y="167" text-anchor="middle">skill + .mcp.json</text>
+              <rect class="dg-box" x="330" y="124" width="220" height="56" rx="8"/>
+              <text class="dg-title" x="440" y="148" text-anchor="middle">MCP server</text>
+              <text class="dg-sub" x="440" y="167" text-anchor="middle">study-room-mcp · 5 tools</text>
+              <rect class="dg-box" x="620" y="124" width="220" height="56" rx="8"/>
+              <text class="dg-title" x="730" y="148" text-anchor="middle">CLI</text>
+              <text class="dg-sub" x="730" y="167" text-anchor="middle">study-room · 7 commands</text>
+
+              <!-- Core -->
+              <rect class="dg-box dg-box--core" x="40" y="228" width="800" height="64" rx="10"/>
+              <text class="dg-title dg-on-dark" x="440" y="255" text-anchor="middle">core</text>
+              <text class="dg-sub dg-on-dark" x="440" y="276" text-anchor="middle">auth · booking · config · updater</text>
+
+              <!-- External systems and local state -->
+              <rect class="dg-box dg-box--ext" x="40" y="340" width="150" height="56" rx="8"/>
+              <text class="dg-title" x="115" y="364" text-anchor="middle">UCSD SSO</text>
+              <text class="dg-sub" x="115" y="383" text-anchor="middle">SAML</text>
+              <rect class="dg-box dg-box--ext" x="210" y="340" width="150" height="56" rx="8"/>
+              <text class="dg-title" x="285" y="364" text-anchor="middle">Duo Push</text>
+              <text class="dg-sub" x="285" y="383" text-anchor="middle">2FA</text>
+              <rect class="dg-box dg-box--ext" x="380" y="340" width="150" height="56" rx="8"/>
+              <text class="dg-title" x="455" y="364" text-anchor="middle">T-RES</text>
+              <text class="dg-sub" x="455" y="383" text-anchor="middle">EMS Cloud</text>
+              <rect class="dg-box dg-box--ext" x="560" y="340" width="130" height="56" rx="8"/>
+              <text class="dg-title" x="625" y="364" text-anchor="middle">OS keyring</text>
+              <text class="dg-sub" x="625" y="383" text-anchor="middle">credentials</text>
+              <rect class="dg-box dg-box--ext" x="710" y="340" width="130" height="56" rx="8"/>
+              <text class="dg-title" x="775" y="364" text-anchor="middle">~/.study-room</text>
+              <text class="dg-sub" x="775" y="383" text-anchor="middle">session · config</text>
+
+              <!-- Edges -->
+              <path class="dg-edge" d="M150 64V124" marker-end="url(#dg1-arrow)"/>
+              <path class="dg-edge" d="M440 64V124" marker-end="url(#dg1-arrow)"/>
+              <path class="dg-edge" d="M730 64V124" marker-end="url(#dg1-arrow)"/>
+              <path class="dg-edge" d="M260 152H330" marker-end="url(#dg1-arrow)"/>
+              <text class="dg-label" x="295" y="144" text-anchor="middle">starts</text>
+              <path class="dg-edge" d="M440 180V228" marker-end="url(#dg1-arrow)"/>
+              <path class="dg-edge" d="M730 180V228" marker-end="url(#dg1-arrow)"/>
+              <path class="dg-edge" d="M115 292V340" marker-end="url(#dg1-arrow)"/>
+              <path class="dg-edge" d="M285 292V340" marker-end="url(#dg1-arrow)"/>
+              <path class="dg-edge" d="M455 292V340" marker-end="url(#dg1-arrow)"/>
+              <text class="dg-label" x="370" y="320" text-anchor="middle">via Playwright</text>
+              <path class="dg-edge" d="M625 292V340" marker-end="url(#dg1-arrow)"/>
+              <path class="dg-edge" d="M775 292V340" marker-end="url(#dg1-arrow)"/>
+              <text class="dg-label" x="700" y="320" text-anchor="middle">local state</text>
+            </svg>
+          </div>
+          <figcaption>Every interface is a thin layer over the same core. The plugin carries no Python; it starts the MCP server.</figcaption>
+        </figure>
+        <p id="architecture-text">All of the logic lives in one core package. <code>auth</code> handles SSO and the saved session, <code>booking</code> drives the T-RES pages, <code>config</code> stores your name and email, and <code>updater</code> checks PyPI for new releases. The CLI and the MCP server only translate input and output. The Claude Code plugin contains no Python at all: it is a skill plus an <code>.mcp.json</code> that starts the MCP server with <code>uvx</code>.</p>
+        <p>Keeping the interfaces thin pays off with every feature. Cancellation, for example, was written once in <code>booking.py</code> and wired into both the CLI and the MCP server in the same change.</p>
+      </section>
+
+      <section id="decisions" aria-labelledby="decisions-h">
+        <h2 id="decisions-h">Key decisions</h2>
+
+        <h3 id="decision-browser">1. No API, so drive a real browser</h3>
+        <dl class="cs-adr">
+          <dt>Context</dt>
+          <dd>T-RES has no public API, and every request sits behind UCSD’s SAML single sign-on plus a Duo Push second factor.</dd>
+          <dt>Options</dt>
+          <dd>Reverse-engineer the HTTP requests and replay them, or drive a real browser the way a person would.</dd>
+          <dt>Decision</dt>
+          <dd>Drive real Chrome with Playwright. Login happens once in a visible window so the user can approve Duo. The resulting storage state (cookies plus local and session storage) is saved and reused by headless Chrome for every search and booking.</dd>
+          <dt>Trade-off</dt>
+          <dd>Every command launches a browser, so it is slower than a raw HTTP call, and a T-RES redesign can break selectors. In exchange I never replicate the SAML redirects or the Duo flow, and the tool behaves exactly like a logged-in student.</dd>
+        </dl>
+        <figure class="cs-figure">
+          <div class="cs-figure__scroll">
+            <svg viewBox="0 0 880 640" role="img" aria-labelledby="dg2-title dg2-desc">
+              <title id="dg2-title">Login and booking sequence</title>
+              <desc id="dg2-desc">When the saved session is valid, study-room loads it, launches headless Chrome, searches and books on T-RES and returns the confirmation. When SSO has expired, it launches a visible Chrome window, submits the keyring credentials to UCSD SSO, Duo sends a push that the user approves within 60 seconds, Duo redirects back to T-RES, the new storage state is saved and the original request is retried.</desc>
+              <defs>
+                <marker id="dg2-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="dg-arrow" d="M0 0L10 5L0 10z"/>
+                </marker>
+                <marker id="dg2-arrow-hl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path class="dg-arrow--hl" d="M0 0L10 5L0 10z"/>
+                </marker>
+              </defs>
+
+              <!-- Participants -->
+              <rect class="dg-box" x="15" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="75" y="31" text-anchor="middle">User</text>
+              <text class="dg-sub" x="75" y="47" text-anchor="middle">AI client or CLI</text>
+              <rect class="dg-box dg-box--core" x="165" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title dg-on-dark" x="225" y="31" text-anchor="middle">study-room</text>
+              <text class="dg-sub dg-on-dark" x="225" y="47" text-anchor="middle">core</text>
+              <rect class="dg-box" x="315" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="375" y="31" text-anchor="middle">Chrome</text>
+              <text class="dg-sub" x="375" y="47" text-anchor="middle">Playwright</text>
+              <rect class="dg-box dg-box--ext" x="465" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="525" y="31" text-anchor="middle">UCSD SSO</text>
+              <text class="dg-sub" x="525" y="47" text-anchor="middle">SAML</text>
+              <rect class="dg-box dg-box--ext" x="615" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="675" y="31" text-anchor="middle">Duo</text>
+              <text class="dg-sub" x="675" y="47" text-anchor="middle">2FA</text>
+              <rect class="dg-box dg-box--ext" x="745" y="12" width="120" height="44" rx="8"/>
+              <text class="dg-title" x="805" y="31" text-anchor="middle">T-RES</text>
+              <text class="dg-sub" x="805" y="47" text-anchor="middle">EMS Cloud</text>
+
+              <!-- Lifelines -->
+              <path class="dg-lifeline" d="M75 56V632"/>
+              <path class="dg-lifeline" d="M225 56V632"/>
+              <path class="dg-lifeline" d="M375 56V632"/>
+              <path class="dg-lifeline" d="M525 56V632"/>
+              <path class="dg-lifeline" d="M675 56V632"/>
+              <path class="dg-lifeline" d="M805 56V632"/>
+
+              <!-- Fast path -->
+              <rect class="dg-frame" x="12" y="72" width="856" height="226" rx="6"/>
+              <rect class="dg-tab" x="12" y="72" width="170" height="22" rx="6"/>
+              <text class="dg-label" x="22" y="87">session valid (&lt; 7 days)</text>
+
+              <path class="dg-edge" d="M75 112H225" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="150" y="105" text-anchor="middle">book_room(…)</text>
+              <path class="dg-edge" d="M225 140h34v14h-34" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="266" y="151">load saved session</text>
+              <path class="dg-edge" d="M225 184H375" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="300" y="177" text-anchor="middle">launch headless</text>
+              <path class="dg-edge" d="M375 222H805" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="600" y="215" text-anchor="middle">search, then book</text>
+              <path class="dg-edge dg-edge--return" d="M805 256H375" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="600" y="249" text-anchor="middle">confirmation</text>
+              <path class="dg-edge dg-edge--return" d="M225 284H75" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="150" y="277" text-anchor="middle">Booked ✓</text>
+
+              <!-- Slow path: re-login -->
+              <rect class="dg-frame dg-frame--hl" x="12" y="314" width="856" height="306" rx="6"/>
+              <rect class="dg-tab" x="12" y="314" width="190" height="22" rx="6"/>
+              <text class="dg-label dg-label--hl" x="22" y="329">SSO expired → re-login</text>
+
+              <path class="dg-edge" d="M225 356H375" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="300" y="349" text-anchor="middle">launch visible Chrome</text>
+              <path class="dg-edge" d="M375 394H525" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="450" y="387" text-anchor="middle">credentials (keyring)</text>
+              <path class="dg-edge" d="M525 432H675" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="600" y="425" text-anchor="middle">push</text>
+              <path class="dg-edge dg-edge--hl" d="M675 478H75" marker-end="url(#dg2-arrow-hl)"/>
+              <text class="dg-label dg-label--hl" x="375" y="469" text-anchor="middle">approve on your phone · waits up to 60 s</text>
+              <path class="dg-edge dg-edge--return" d="M675 522H375" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="600" y="515" text-anchor="middle">redirect to T-RES</text>
+              <path class="dg-edge dg-edge--return" d="M375 560H225" marker-end="url(#dg2-arrow)"/>
+              <text class="dg-label" x="300" y="553" text-anchor="middle">save storage_state</text>
+              <path class="dg-edge dg-edge--hl" d="M225 592h34v14h-34" marker-end="url(#dg2-arrow-hl)"/>
+              <text class="dg-label dg-label--hl" x="266" y="603">retry the original request</text>
+            </svg>
+          </div>
+          <figcaption>The fast path reuses a saved session. When SSO expires, a visible Chrome window opens, fills in credentials from the OS keyring and waits for Duo, then the original request runs again.</figcaption>
+        </figure>
+        <p>Credentials go into the OS keyring (macOS Keychain, Windows Credential Locker, Linux Secret Service), never a plain file. A saved session is trusted for seven days. If the site bounces a request back to SSO sooner, the tool opens Chrome, fills in the stored credentials, waits for Duo, and retries the same request instead of failing.</p>
+
+        <h3 id="decision-core">2. One core, many interfaces</h3>
+        <dl class="cs-adr">
+          <dt>Context</dt>
+          <dd>The first release was a CLI and an MCP server whose tool descriptions and responses were written in Korean, with setup docs aimed at Claude Code.</dd>
+          <dt>Decision</dt>
+          <dd>Two days later I made the MCP server client-agnostic: English descriptions and responses, a <code>study-room-mcp</code> entry point that <code>uvx</code> can run without a manual install, and setup docs that work for Codex CLI, Gemini CLI and Cursor too.</dd>
+          <dt>Result</dt>
+          <dd>The same five tools (<code>search_rooms</code>, <code>book_room</code>, <code>my_events</code>, <code>cancel_reservation</code>, <code>login</code>) work in any MCP client, and the CLI exposes the same core through seven commands. The architecture diagram above shows the split.</dd>
+        </dl>
+
+        <h3 id="decision-shipping">3. Shipping to two worlds</h3>
+        <dl class="cs-adr">
+          <dt>Context</dt>
+          <dd>People install this either as a Python tool or as a Claude Code plugin. Both should stay current without the user doing anything.</dd>
+          <dt>Decision</dt>
+          <dd>Split the project into three repositories by what changes. <code>ucsd-study-room</code> holds the Python code and ships to PyPI. <code>ucsd-study-room-plugin</code> holds the skill and <code>.mcp.json</code>. <code>claude-plugins</code> is the marketplace that lists the plugin and its version. The plugin’s <code>.mcp.json</code> runs <code>uvx --refresh</code>, so every MCP start resolves the newest release from PyPI.</dd>
+          <dt>Result</dt>
+          <dd>A Python change needs only a PyPI release. A skill or config change needs a plugin push plus a marketplace version bump. CLI users get a once-a-day update notice and a <code>study-room update</code> command.</dd>
+        </dl>
+        <figure class="cs-figure">
+          <div class="cs-figure__scroll">
+            <svg viewBox="0 0 880 384" role="img" aria-labelledby="dg3-title dg3-desc">
+              <title id="dg3-title">How updates reach users</title>
+              <desc id="dg3-desc">Python code: the ucsd-study-room repository publishes to PyPI, and uvx on the user's machine resolves the latest release. Skills and config: the claude-plugins marketplace points to the ucsd-study-room-plugin repository; Claude Code clones the plugin into its cache and refreshes it when the marketplace version is bumped. The cached plugin's .mcp.json runs uvx --refresh.</desc>
+              <defs>
+                <marker id="dg3-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                  <path class="dg-arrow" d="M0 0L10 5L0 10z"/>
+                </marker>
+                <marker id="dg3-arrow-hl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path class="dg-arrow--hl" d="M0 0L10 5L0 10z"/>
+                </marker>
+              </defs>
+
+              <!-- User's machine -->
+              <rect class="dg-frame" x="580" y="16" width="280" height="356" rx="10"/>
+              <text class="dg-lane" x="600" y="36">USER'S MACHINE</text>
+
+              <!-- Lane A: Python code -->
+              <text class="dg-lane" x="40" y="36">PYTHON CODE</text>
+              <rect class="dg-box" x="40" y="52" width="210" height="56" rx="8"/>
+              <text class="dg-title" x="145" y="76" text-anchor="middle">ucsd-study-room</text>
+              <text class="dg-sub" x="145" y="95" text-anchor="middle">Python package</text>
+              <rect class="dg-box dg-box--ext" x="330" y="52" width="180" height="56" rx="8"/>
+              <text class="dg-title" x="420" y="76" text-anchor="middle">PyPI</text>
+              <text class="dg-sub" x="420" y="95" text-anchor="middle">ucsd-study-room</text>
+              <rect class="dg-box" x="600" y="52" width="240" height="56" rx="8"/>
+              <text class="dg-title" x="720" y="76" text-anchor="middle">uvx / uv tool</text>
+              <text class="dg-sub" x="720" y="95" text-anchor="middle">daily update check</text>
+              <path class="dg-edge dg-edge--hl" d="M250 80H330" marker-end="url(#dg3-arrow-hl)"/>
+              <text class="dg-label dg-label--hl" x="290" y="72" text-anchor="middle">publish</text>
+              <path class="dg-edge dg-edge--hl" d="M510 80H600" marker-end="url(#dg3-arrow-hl)"/>
+              <text class="dg-label dg-label--hl" x="572" y="72" text-anchor="end">resolve latest</text>
+
+              <!-- Lane B: skills and config -->
+              <text class="dg-lane" x="40" y="184">SKILLS &amp; CONFIG</text>
+              <rect class="dg-box" x="40" y="200" width="210" height="56" rx="8"/>
+              <text class="dg-title" x="145" y="224" text-anchor="middle">ucsd-study-room-plugin</text>
+              <text class="dg-sub" x="145" y="243" text-anchor="middle">skill · .mcp.json</text>
+              <rect class="dg-box" x="40" y="296" width="210" height="56" rx="8"/>
+              <text class="dg-title" x="145" y="320" text-anchor="middle">claude-plugins</text>
+              <text class="dg-sub" x="145" y="339" text-anchor="middle">marketplace.json · version</text>
+              <path class="dg-edge" d="M145 296V256" marker-end="url(#dg3-arrow)"/>
+              <text class="dg-label" x="155" y="281">source url</text>
+
+              <rect class="dg-box" x="600" y="248" width="240" height="56" rx="8"/>
+              <text class="dg-title" x="720" y="272" text-anchor="middle">Claude Code plugin cache</text>
+              <text class="dg-sub" x="720" y="291" text-anchor="middle">refreshes on version bump</text>
+              <path class="dg-edge" d="M250 228C420 228 430 270 600 270" marker-end="url(#dg3-arrow)"/>
+              <text class="dg-label" x="420" y="236" text-anchor="middle">git clone</text>
+              <path class="dg-edge" d="M250 324C420 324 430 290 600 290" marker-end="url(#dg3-arrow)"/>
+              <text class="dg-label" x="420" y="330" text-anchor="middle">version bump</text>
+
+              <!-- The plugin starts the Python package -->
+              <path class="dg-edge" d="M720 248V108" marker-end="url(#dg3-arrow)"/>
+              <text class="dg-label" x="730" y="174">runs</text>
+              <text class="dg-label" x="730" y="188">uvx --refresh</text>
+            </svg>
+          </div>
+          <figcaption>Two update paths. Python code reaches users through PyPI; skills and config reach them through a marketplace version bump.</figcaption>
+        </figure>
+        <aside class="cs-gotcha">
+          <h4>Gotchas I hit</h4>
+          <ul>
+            <li>A plugin only loads when the repository root is the plugin root. I first kept it in a <code>plugin/</code> folder inside the main repo, and Claude Code could not find the skill.</li>
+            <li>Claude Code caches plugins by marketplace version. Pushing to the plugin repo changes nothing for users until the version in <code>marketplace.json</code> goes up.</li>
+            <li>The marketplace source type is <code>"url"</code> with a full <code>.git</code> URL, not <code>"github"</code>.</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section id="in-use" aria-labelledby="in-use-h">
+        <h2 id="in-use-h">In use</h2>
+        <figure class="cs-figure">
+          <div class="cs-term">
+            <div class="cs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>Claude Code</span></div>
+            <pre class="cs-term__chat"><span class="t-l0 t-input">❯ Book a study room next Monday from 2 to 4 pm</span><span class="t-l0 t-gap"><span class="t-ok">●</span> <b>Skill</b>(ucsd-study-room:booking-guide)</span><span class="t-l2 t-dim">⎿  Successfully loaded skill</span><span class="t-l1 t-gap t-dim">Called plugin:ucsd-study-room:study-room</span><span class="t-l0 t-gap"><span class="t-dim">●</span> User answered Claude's questions:</span><span class="t-l2"><span class="t-dim">⎿  · Mon 10/19, 2–4 PM: 4 rooms are open. Which one should I book?</span> → <span class="t-accent">Study Room 3</span></span><span class="t-l1 t-gap t-dim">Called plugin:ucsd-study-room:study-room</span><span class="t-l0 t-gap">● I booked Price Center Study Room 3 for Monday, October 19, from 2 to 4 PM, and the system confirmed it.</span></pre>
+          </div>
+          <figcaption>One sentence in Claude Code: it finds the open rooms, asks which one, then books it.</figcaption>
+        </figure>
+        <figure class="cs-figure">
+          <div class="cs-term">
+            <div class="cs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>Terminal</span></div>
+            <pre class="cs-term__table"><span class="t-ok">$</span> <span class="t-input">study-room search --date 2026-10-19 --start 14:00 --end 16:00</span>
+Authenticating via SAML...
+Authentication complete.
+<i> Available Rooms (Price Center)</i>
+┏━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ <b>#</b> ┃ <b>Room</b>                      ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ <span class="t-cyan">1</span> │ <span class="t-ok">Price Center Study Room 2</span> │
+│ <span class="t-cyan">2</span> │ <span class="t-ok">Price Center Study Room 4</span> │
+│ <span class="t-cyan">3</span> │ <span class="t-ok">Price Center Study Room 5</span> │
+└───┴───────────────────────────┘</pre>
+          </div>
+          <figcaption>The same Monday 2–4 pm search from the CLI, after the booking. Study Room 3 is no longer listed.</figcaption>
+        </figure>
+      </section>
+
+      <section id="next" aria-labelledby="next-h">
+        <h2 id="next-h">What's next</h2>
+        <p>I still think of this project as unfinished. These are the next steps, in the order I would take them.</p>
+        <ol class="cs-next">
+          <li>
+            <h3>See every open room at a glance</h3>
+            <p>Today you have to name a time before you see anything. A day view of open slots matches how people actually decide: find a gap, then book it.</p>
+          </li>
+          <li>
+            <h3>A gentler login</h3>
+            <p>Login still opens a Chrome window and waits for Duo. That is the price of <a href="#decision-browser">driving a real browser</a>, and it is the biggest hurdle for a first-time user.</p>
+          </li>
+          <li>
+            <h3>Cover more than Price Center</h3>
+            <p>Other study spaces at UCSD are booked on different platforms. Bringing them behind the same core is the step toward one place to book any room on campus.</p>
+          </li>
+          <li>
+            <h3>A web app for everyone at UCSD</h3>
+            <p>Not everyone uses a terminal or an AI assistant. A web front end would be a fourth interface on <a href="#decision-core">the same core</a>, and the core-first structure is what makes that feasible.</p>
+          </li>
+        </ol>
+      </section>
+
+      <p class="cs-end"><a href="../../index.html#projects">&larr; All projects</a></p>
+    </article>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Theo Lee. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Wide diagrams scroll sideways on narrow screens. Touch and trackpads
+    // already do that; this lets a mouse drag them too.
+    document.querySelectorAll('.cs-figure__scroll').forEach((box) => {
+      const sync = () => box.classList.toggle('is-scrollable', box.scrollWidth > box.clientWidth);
+      sync();
+      window.addEventListener('resize', sync);
+
+      let drag = null; // { id, startX, startLeft }
+      box.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse' || e.button !== 0 || !box.classList.contains('is-scrollable')) return;
+        drag = { id: e.pointerId, startX: e.clientX, startLeft: box.scrollLeft };
+        box.setPointerCapture(e.pointerId);
+        box.classList.add('is-dragging');
+      });
+      box.addEventListener('pointermove', (e) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        box.scrollLeft = drag.startLeft - (e.clientX - drag.startX);
+      });
+      const end = (e) => {
+        if (!drag || e.pointerId !== drag.id) return;
+        drag = null;
+        box.classList.remove('is-dragging');
+      };
+      box.addEventListener('pointerup', end);
+      box.addEventListener('pointercancel', end);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,668 @@
+/*
+ * Case-study pages (projects/<name>/index.html). Loaded after style.css and reuses its
+ * variables. Everything is scoped to .cs-* and .dg-* classes so the home page
+ * is unaffected.
+ */
+
+/* -------------------------------------------------- */
+/* Top bar (reuses the home nav in its scrolled state) */
+/* -------------------------------------------------- */
+
+nav .cs-back {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+
+nav .cs-back:hover,
+nav .cs-back:focus-visible {
+  color: var(--secondary-color);
+}
+
+/* -------------------------------------------------- */
+/* Layout: sticky table of contents + article column   */
+/* -------------------------------------------------- */
+
+.cs-layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 112px 16px 80px;
+}
+
+.cs-toc {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .cs-layout {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr);
+    gap: 56px;
+    padding-left: 24px;
+    padding-right: 24px;
+    /* The text column is centred inside an 816px article, 88px in from each
+       side. Shift the whole layout left by that much, so the text starts where
+       the article does and the page reads as centred; on narrower windows the
+       shift shrinks to zero instead of pushing the TOC off screen. */
+    margin-left: max(0px, calc((100% - 1100px) / 2 - 88px));
+    margin-right: auto;
+  }
+
+  .cs-toc {
+    display: block;
+    position: sticky;
+    top: 96px;
+    align-self: start;
+  }
+}
+
+.cs-toc ol {
+  list-style: none;
+  border-left: 1px solid rgba(13, 37, 63, 0.12);
+}
+
+.cs-toc a {
+  display: block;
+  padding: 6px 0 6px 14px;
+  font-size: 0.85rem;
+  color: #5b6773;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.cs-toc a:hover,
+.cs-toc a:focus-visible {
+  color: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
+/* Article typography                                  */
+/* -------------------------------------------------- */
+
+.cs-article {
+  min-width: 0;
+  /* Reading width in rem, not ch: ch scales with each element's own font
+     size, so headings and small labels would get different column widths */
+  --cs-measure: 40rem;
+}
+
+/* Undo the home page's centred, padded <section> defaults */
+.cs-article > section,
+.cs-hero {
+  padding: 0;
+  max-width: none;
+  margin: 0 0 72px;
+  scroll-margin-top: 88px;
+}
+
+.cs-article p,
+.cs-article ol,
+.cs-article ul,
+.cs-article dl {
+  max-width: var(--cs-measure);
+}
+
+/* Text sits in a centred column at a comfortable reading width, while
+   card grids and diagrams use the full article width around it */
+.cs-hero > *,
+.cs-article > section > *,
+.cs-end,
+.cs-figure figcaption {
+  max-width: var(--cs-measure);
+  margin-inline: auto;
+}
+
+.cs-article > section > .cs-figure {
+  max-width: none;
+}
+
+.cs-article p {
+  margin-bottom: 16px;
+  line-height: 1.7;
+}
+
+.cs-article h2 {
+  text-align: left;
+  font-size: 1.6rem;
+  color: var(--primary-color);
+  margin-bottom: 24px;
+}
+
+.cs-article h2::after {
+  margin: 10px 0 0;
+}
+
+.cs-article h3 {
+  font-size: 1.15rem;
+  color: var(--primary-color);
+  margin-block: 48px 16px;
+  scroll-margin-top: 88px;
+}
+
+.cs-article code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.88em;
+  background: rgba(13, 37, 63, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.cs-article a {
+  color: var(--primary-color);
+}
+
+/* -------------------------------------------------- */
+/* Hero and TL;DR                                      */
+/* -------------------------------------------------- */
+
+.cs-eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #007a69;
+  margin-bottom: 8px;
+}
+
+.cs-hero h1 {
+  font-size: 2.6rem;
+  line-height: 1.15;
+  color: var(--primary-color);
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+}
+
+.cs-article .cs-lede {
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+.cs-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+  margin-block: 28px;
+}
+
+.cs-meta dt,
+.cs-tldr dt,
+.cs-adr dt {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5b6773;
+}
+
+.cs-meta dd {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* Like the home page's .project-link, but in the darker teal so the text
+   stays readable on the light background */
+.cs-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.cs-article .cs-links a {
+  color: #007a69;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.cs-article .cs-links a:hover,
+.cs-article .cs-links a:focus-visible {
+  color: var(--primary-color);
+}
+
+/* One card in the text column: a label column and a text column, like the
+   decision records further down */
+.cs-tldr {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 8px 24px;
+  box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
+}
+
+.cs-tldr > div {
+  padding: 16px 0;
+}
+
+.cs-tldr > div + div {
+  border-top: 1px solid rgba(13, 37, 63, 0.08);
+}
+
+@media (min-width: 720px) {
+  .cs-tldr > div {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+
+/* A short version of the teal rule under the section headings */
+.cs-tldr dt::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 3px;
+  background: var(--secondary-color);
+  margin-top: 8px;
+}
+
+.cs-tldr dt {
+  padding-top: 3px;
+}
+
+.cs-tldr dd {
+  line-height: 1.6;
+}
+
+@media (max-width: 719px) {
+  .cs-tldr dd {
+    margin-top: 10px;
+  }
+}
+
+/* -------------------------------------------------- */
+/* Story blocks: step list, callout, ADR, gotcha, next */
+/* -------------------------------------------------- */
+
+.cs-steps {
+  counter-reset: step;
+  list-style: none;
+  margin: 20px 0 24px;
+}
+
+.cs-steps li {
+  counter-increment: step;
+  position: relative;
+  padding: 5px 0 5px 40px;
+}
+
+.cs-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(13, 37, 63, 0.08);
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.cs-article .cs-callout {
+  border-left: 3px solid var(--secondary-color);
+  background: #ffffff;
+  padding: 14px 18px;
+  font-size: 1.1rem;
+}
+
+.cs-adr {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px 20px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 720px) {
+  .cs-adr {
+    grid-template-columns: 110px minmax(0, 1fr);
+  }
+}
+
+.cs-adr dt {
+  padding-top: 4px;
+}
+
+.cs-adr dd {
+  margin-bottom: 12px;
+  line-height: 1.65;
+}
+
+.cs-gotcha {
+  max-width: var(--cs-measure);
+  background: #fff8e6;
+  border: 1px solid #f0d58a;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 24px 0;
+}
+
+.cs-gotcha h4 {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a6100;
+  margin-bottom: 8px;
+}
+
+.cs-gotcha ul {
+  padding-left: 18px;
+}
+
+.cs-gotcha li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
+
+/* Same single card as the TL;DR, one numbered row per idea */
+.cs-next {
+  counter-reset: next;
+  list-style: none;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 8px 24px;
+  box-shadow: 0 1px 3px rgba(13, 37, 63, 0.08);
+}
+
+.cs-next li {
+  counter-increment: next;
+  position: relative;
+  padding: 18px 0 18px 42px;
+}
+
+.cs-next li + li {
+  border-top: 1px solid rgba(13, 37, 63, 0.08);
+}
+
+/* Numbered like the booking steps in "Why I built this" */
+.cs-next li::before {
+  content: counter(next);
+  position: absolute;
+  left: 0;
+  top: 17px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(13, 37, 63, 0.08);
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.cs-next h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.cs-next p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.cs-end {
+  border-top: 1px solid rgba(13, 37, 63, 0.12);
+  padding-top: 24px;
+  font-weight: 600;
+}
+
+/* -------------------------------------------------- */
+/* Figures: diagrams and screenshots                   */
+/* -------------------------------------------------- */
+
+.cs-figure {
+  margin: 32px 0 40px;
+}
+
+/* Wide diagrams scroll inside the figure on phones instead of shrinking
+   their text below readable size or widening the page */
+.cs-figure__scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Set by the page script when the diagram is wider than its box */
+@media (pointer: fine) {
+  .cs-figure__scroll.is-scrollable {
+    cursor: grab;
+  }
+}
+
+.cs-figure__scroll.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+.cs-figure svg {
+  display: block;
+  width: 100%;
+  min-width: 640px;
+  height: auto;
+}
+
+.cs-figure figcaption {
+  max-width: var(--cs-measure);
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #5b6773;
+}
+
+
+/* -------------------------------------------------- */
+/* Small screens                                       */
+/* -------------------------------------------------- */
+
+@media (max-width: 590px) {
+  .cs-hero h1 {
+    font-size: 2rem;
+  }
+
+  .cs-article .cs-lede {
+    font-size: 1.1rem;
+  }
+}
+
+/* -------------------------------------------------- */
+/* Diagram system: shared by every inline SVG diagram  */
+/* -------------------------------------------------- */
+
+.dg-box {
+  fill: #ffffff;
+  stroke: var(--primary-color);
+  stroke-width: 1.5;
+}
+
+.dg-box--core {
+  fill: var(--primary-color);
+}
+
+.dg-box--ext {
+  fill: var(--light-color);
+  stroke: #9aa5b1;
+  stroke-dasharray: 5 4;
+}
+
+.dg-frame {
+  fill: none;
+  stroke: #c5ccd3;
+  stroke-width: 1;
+}
+
+.dg-frame--hl {
+  fill: rgba(0, 191, 166, 0.06);
+  stroke: var(--secondary-color);
+}
+
+.dg-tab {
+  fill: #ffffff;
+  stroke: #c5ccd3;
+  stroke-width: 1;
+}
+
+.dg-title {
+  font: 600 14px var(--font-primary);
+  fill: var(--primary-color);
+}
+
+.dg-sub {
+  font: 12px var(--font-primary);
+  fill: #5b6773;
+}
+
+.dg-title.dg-on-dark {
+  fill: #ffffff;
+}
+
+.dg-sub.dg-on-dark {
+  fill: rgba(255, 255, 255, 0.78);
+}
+
+.dg-label {
+  font: 11px var(--font-primary);
+  fill: #5b6773;
+}
+
+.dg-label--hl {
+  fill: #007a69;
+  font-weight: 700;
+}
+
+.dg-lane {
+  font: 700 11px var(--font-primary);
+  letter-spacing: 0.1em;
+  fill: #5b6773;
+}
+
+.dg-edge {
+  fill: none;
+  stroke: #7a8794;
+  stroke-width: 1.5;
+}
+
+.dg-edge--return {
+  stroke-dasharray: 5 4;
+}
+
+.dg-edge--hl {
+  stroke: var(--secondary-color);
+  stroke-width: 2.5;
+}
+
+.dg-lifeline {
+  stroke: #c5ccd3;
+  stroke-dasharray: 3 4;
+}
+
+.dg-arrow {
+  fill: #7a8794;
+}
+
+.dg-arrow--hl {
+  fill: var(--secondary-color);
+}
+
+/* -------------------------------------------------- */
+/* Terminal windows: real text, not screenshots        */
+/* -------------------------------------------------- */
+
+/* Same palette as the terminal capture on the home page's project card */
+.cs-term {
+  background: #1e1e2e;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(13, 37, 63, 0.18);
+  color: #cdd6f4;
+  font-family: "SF Mono", ui-monospace, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.cs-term__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #181825;
+}
+
+.cs-term__bar i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #45475a;
+}
+
+.cs-term__bar span {
+  margin-left: 8px;
+  font-size: 12px;
+  color: #7f849c;
+}
+
+.cs-term pre {
+  margin: 0;
+  padding: 18px 22px 20px;
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.cs-term b {
+  color: #ffffff;
+}
+
+.cs-term .t-input {
+  color: #ffffff;
+}
+
+.cs-term .t-dim {
+  color: #9399b2;
+}
+
+.cs-term .t-ok {
+  color: #a6e3a1;
+}
+
+.cs-term .t-accent {
+  color: #89b4fa;
+}
+
+/* Chat transcript: one block per line, so a wrapped line stays indented
+   under its own text the way the terminal shows it */
+.cs-term__chat > span {
+  display: block;
+}
+
+.cs-term .t-gap {
+  margin-top: 1.6em;
+}
+
+.cs-term .t-l0 {
+  padding-left: 2ch;
+  text-indent: -2ch;
+}
+
+.cs-term .t-l1 {
+  padding-left: 2ch;
+}
+
+.cs-term .t-l2 {
+  padding-left: 5ch;
+  text-indent: -3ch;
+}
+
+.cs-term .t-cyan {
+  color: #89dceb;
+}
+
+/* Box-drawing tables need tight lines or their borders break apart */
+.cs-term pre.cs-term__table {
+  line-height: 1.3;
+  white-space: pre;
+  overflow-x: auto;
+}
