@@ -164,7 +164,7 @@ nav .cs-back:focus-visible {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #00806f;
+  color: #007a69;
   margin-bottom: 8px;
 }
 
@@ -195,7 +195,7 @@ nav .cs-back:focus-visible {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #7a8794;
+  color: #5b6773;
 }
 
 .cs-meta dd {
@@ -212,7 +212,7 @@ nav .cs-back:focus-visible {
 }
 
 .cs-article .cs-links a {
-  color: #00806f;
+  color: #007a69;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
@@ -529,14 +529,14 @@ nav .cs-back:focus-visible {
 }
 
 .dg-label--hl {
-  fill: #00806f;
+  fill: #007a69;
   font-weight: 700;
 }
 
 .dg-lane {
   font: 700 11px var(--font-primary);
   letter-spacing: 0.1em;
-  fill: #7a8794;
+  fill: #5b6773;
 }
 
 .dg-edge {
