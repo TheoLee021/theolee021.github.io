@@ -1,5 +1,5 @@
 /*
- * Case-study pages (projects/*.html). Loaded after style.css and reuses its
+ * Case-study pages (projects/<name>/index.html). Loaded after style.css and reuses its
  * variables. Everything is scoped to .cs-* and .dg-* classes so the home page
  * is unaffected.
  */
