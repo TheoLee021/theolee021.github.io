@@ -116,6 +116,7 @@ nav .cs-back:focus-visible {
   margin-inline: auto;
 }
 
+.cs-hero > .cs-figure,
 .cs-article > section > .cs-figure {
   max-width: none;
 }
@@ -596,6 +597,40 @@ nav .cs-back:focus-visible {
   height: 11px;
   border-radius: 50%;
   background: #45475a;
+  transition: background-color 0.15s ease;
+}
+
+/* Like macOS, the window controls only light up under the pointer */
+.cs-term:hover .cs-term__bar i:nth-child(1) {
+  background-color: #ff5f57;
+}
+
+.cs-term:hover .cs-term__bar i:nth-child(2) {
+  background-color: #febc2e;
+}
+
+.cs-term:hover .cs-term__bar i:nth-child(3) {
+  background-color: #28c840;
+}
+
+/* ...and show their close, minimize and full-screen glyphs once the
+   pointer reaches any of the three */
+.cs-term__bar:has(i:hover) i:nth-child(1) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3.5 3.5l5 5M8.5 3.5l-5 5' stroke='%237e0508' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.cs-term__bar:has(i:hover) i:nth-child(2) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2.8 6h6.4' stroke='%23985712' stroke-width='1.4' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.cs-term__bar:has(i:hover) i:nth-child(3) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3.4 3.4h4L3.4 7.4zM8.6 8.6h-4l4-4z' fill='%230b650d'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-term__bar i {
+    transition: none;
+  }
 }
 
 .cs-term__bar span {
@@ -654,6 +689,182 @@ nav .cs-back:focus-visible {
 .cs-term .t-l2 {
   padding-left: 5ch;
   text-indent: -3ch;
+}
+
+/* Hero slides. Without JS they simply stack. With JS (the .js class is
+   set in <head>, before first paint) both share one grid cell from the
+   start, so the window is as tall as the taller slide, the second slide
+   never shows on load, and nothing below jumps when switching */
+.cs-slides__track {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* let the wide table scroll instead */
+  gap: 24px;
+}
+
+.js .cs-slides .cs-slides__track {
+  gap: 0;
+}
+
+.js .cs-slides .cs-slide {
+  grid-area: 1 / 1;
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(16px);
+}
+
+/* Fade only once the script has shown the first slide, i.e. on arrow clicks */
+.js .cs-slides.is-animated .cs-slide {
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s 0.25s;
+}
+
+.js .cs-slides .cs-slide > .cs-term {
+  flex: 1;
+  min-width: 0;
+}
+
+.js .cs-slides .cs-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.js .cs-slides.is-animated .cs-slide.is-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Both captions share one cell too, so a longer one never moves the page */
+.js .cs-slides figcaption {
+  display: grid;
+}
+
+.js .cs-slides figcaption > span {
+  grid-area: 1 / 1;
+}
+
+.js .cs-slides figcaption > span:not(.is-active) {
+  visibility: hidden;
+}
+
+.cs-slides figcaption > span + span::before {
+  content: " ";
+}
+
+.cs-slides__btn {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-top: -18px;
+  padding: 0;
+  border: 1px solid #d0d7de;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--primary-color);
+  box-shadow: 0 2px 8px rgba(13, 37, 63, 0.15);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.cs-slides__btn[hidden] {
+  display: none;
+}
+
+.cs-slides__btn:hover,
+.cs-slides__btn:focus-visible {
+  color: #007a69;
+  border-color: #007a69;
+}
+
+/* Beats .cs-figure svg, which sizes the diagrams */
+.cs-slides .cs-slides__btn svg {
+  width: 16px;
+  min-width: 0;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Straddle the window edge */
+.cs-slides__btn--prev {
+  left: -18px;
+}
+
+.cs-slides__btn--next {
+  right: -18px;
+}
+
+@media (max-width: 480px) {
+  .cs-slides__btn--prev {
+    left: -12px;
+  }
+
+  .cs-slides__btn--next {
+    right: -12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .cs-slides.is-animated .cs-slide,
+  .js .cs-slides.is-animated .cs-slide.is-active {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Question picker that only exists while the replay plays */
+.cs-term .t-ask,
+.cs-term .t-collapsed {
+  display: none;
+}
+
+.cs-term .t-ask.is-open {
+  display: block;
+}
+
+.cs-term .t-ask > span {
+  display: block;
+}
+
+.cs-term .t-ask [data-option]::before {
+  content: "  ";
+}
+
+.cs-term .t-ask .is-current {
+  color: #89b4fa;
+}
+
+.cs-term .t-ask .is-current::before {
+  content: "❯ ";
+}
+
+/* Typing replay in the hero: hidden lines keep their space so the
+   window does not grow while it plays */
+.cs-term .t-pending {
+  visibility: hidden;
+}
+
+.cs-term .t-caret {
+  display: inline-block;
+  width: 1ch;
+  height: 1.2em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: #cdd6f4;
+  animation: t-blink 1s steps(1) infinite;
+}
+
+@keyframes t-blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 .cs-term .t-cyan {
