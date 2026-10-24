@@ -14,6 +14,8 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/case-study.css">
+  <!-- Lets the CSS lay out the hero slides before first paint -->
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
   <!-- Same fixed bar as the home page, always in its scrolled (solid) state -->
@@ -29,7 +31,6 @@
         <li><a href="#why">Why I built this</a></li>
         <li><a href="#architecture">Architecture</a></li>
         <li><a href="#decisions">Key decisions</a></li>
-        <li><a href="#in-use">In use</a></li>
         <li><a href="#next">What's next</a></li>
       </ol>
     </aside>
@@ -40,6 +41,42 @@
         <p class="cs-eyebrow">Case Study</p>
         <h1>ucsd-study-room</h1>
         <p class="cs-lede">Book a UCSD study room by just asking your AI assistant.</p>
+        <!-- Two slides: the booking in Claude Code, then the same search from the CLI.
+             data-pause marks a line that appears after that many ms when the slide replays;
+             data-type is the text that gets typed first. -->
+        <figure class="cs-figure cs-slides" aria-roledescription="carousel" aria-label="ucsd-study-room in use">
+          <div class="cs-slides__track">
+            <div class="cs-slide is-active" role="group" aria-roledescription="slide" aria-label="1 of 2: Claude Code">
+              <div class="cs-term">
+                <div class="cs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>Claude Code</span></div>
+                <pre class="cs-term__chat"><span class="t-l0 t-input">❯ <span data-type>Book a study room next Monday from 2 to 4 pm</span></span><span class="t-l0 t-gap" data-pause="700"><span class="t-ok">●</span> <b>Skill</b>(ucsd-study-room:booking-guide)</span><span class="t-l2 t-dim" data-pause="250">⎿  Successfully loaded skill</span><span class="t-l1 t-gap t-dim" data-pause="1100">Called plugin:ucsd-study-room:study-room</span><span class="t-ask t-gap" data-pause="900" data-ask><span>Mon 10/19, 2–4 PM: 4 rooms are open. Which one should I book?</span><span class="t-gap" data-option>1. Study Room 2</span><span data-option data-choice>2. Study Room 3</span><span data-option>3. Study Room 4</span><span data-option>4. Study Room 5</span><span class="t-dim">Enter to select · ↑/↓ to navigate · Esc to cancel</span></span><span class="t-l0 t-gap" data-pause="300"><span class="t-dim">●</span> User answered Claude's questions:</span><span class="t-l2" data-pause="250"><span class="t-dim">⎿  · Mon 10/19, 2–4 PM: 4 rooms are open. Which one should I book?</span> → <span class="t-accent">Study Room 3</span></span><span class="t-l1 t-gap t-dim" data-pause="1100">Called plugin:ucsd-study-room:study-room</span><span class="t-l0 t-gap" data-pause="900" data-stream>● I booked Price Center Study Room 3 for Monday, October 19, from 2 to 4 PM, and the system confirmed it.</span></pre>
+              </div>
+            </div>
+            <div class="cs-slide" role="group" aria-roledescription="slide" aria-label="2 of 2: Terminal">
+              <div class="cs-term">
+                <div class="cs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>Terminal</span></div>
+                <pre class="cs-term__table"><span class="t-ok">$</span> <span class="t-input" data-type>study-room search --date 2026-10-19 --start 14:00 --end 16:00</span>
+<span data-pause="600">Authenticating via SAML...
+</span><span data-pause="1600">Authentication complete.
+</span><span data-pause="700"><i> Available Rooms (Price Center)</i>
+┏━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ <b>#</b> ┃ <b>Room</b>                      ┃
+┡━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ <span class="t-cyan">1</span> │ <span class="t-ok">Price Center Study Room 2</span> │
+│ <span class="t-cyan">2</span> │ <span class="t-ok">Price Center Study Room 4</span> │
+│ <span class="t-cyan">3</span> │ <span class="t-ok">Price Center Study Room 5</span> │
+└───┴───────────────────────────┘</span></pre>
+              </div>
+            </div>
+            <button type="button" class="cs-slides__btn cs-slides__btn--prev" aria-label="Previous slide: Claude Code" hidden>
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+            </button>
+            <button type="button" class="cs-slides__btn cs-slides__btn--next" aria-label="Next slide: Terminal" hidden>
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+            </button>
+          </div>
+          <figcaption><span class="is-active">One sentence in Claude Code: it finds the open rooms, asks which one, then books it.</span><span>The same Monday 2–4 pm search from the CLI, after booking with Claude Code. Study Room 3 is no longer listed.</span></figcaption>
+        </figure>
         <dl class="cs-meta">
           <div><dt>Role</dt><dd>Solo developer</dd></div>
           <div><dt>Timeline</dt><dd>Mar 2026 – present</dd></div>
@@ -355,34 +392,6 @@
         </aside>
       </section>
 
-      <section id="in-use" aria-labelledby="in-use-h">
-        <h2 id="in-use-h">In use</h2>
-        <figure class="cs-figure">
-          <div class="cs-term">
-            <div class="cs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>Claude Code</span></div>
-            <pre class="cs-term__chat"><span class="t-l0 t-input">❯ Book a study room next Monday from 2 to 4 pm</span><span class="t-l0 t-gap"><span class="t-ok">●</span> <b>Skill</b>(ucsd-study-room:booking-guide)</span><span class="t-l2 t-dim">⎿  Successfully loaded skill</span><span class="t-l1 t-gap t-dim">Called plugin:ucsd-study-room:study-room</span><span class="t-l0 t-gap"><span class="t-dim">●</span> User answered Claude's questions:</span><span class="t-l2"><span class="t-dim">⎿  · Mon 10/19, 2–4 PM: 4 rooms are open. Which one should I book?</span> → <span class="t-accent">Study Room 3</span></span><span class="t-l1 t-gap t-dim">Called plugin:ucsd-study-room:study-room</span><span class="t-l0 t-gap">● I booked Price Center Study Room 3 for Monday, October 19, from 2 to 4 PM, and the system confirmed it.</span></pre>
-          </div>
-          <figcaption>One sentence in Claude Code: it finds the open rooms, asks which one, then books it.</figcaption>
-        </figure>
-        <figure class="cs-figure">
-          <div class="cs-term">
-            <div class="cs-term__bar" aria-hidden="true"><i></i><i></i><i></i><span>Terminal</span></div>
-            <pre class="cs-term__table"><span class="t-ok">$</span> <span class="t-input">study-room search --date 2026-10-19 --start 14:00 --end 16:00</span>
-Authenticating via SAML...
-Authentication complete.
-<i> Available Rooms (Price Center)</i>
-┏━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ <b>#</b> ┃ <b>Room</b>                      ┃
-┡━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│ <span class="t-cyan">1</span> │ <span class="t-ok">Price Center Study Room 2</span> │
-│ <span class="t-cyan">2</span> │ <span class="t-ok">Price Center Study Room 4</span> │
-│ <span class="t-cyan">3</span> │ <span class="t-ok">Price Center Study Room 5</span> │
-└───┴───────────────────────────┘</pre>
-          </div>
-          <figcaption>The same Monday 2–4 pm search from the CLI, after the booking. Study Room 3 is no longer listed.</figcaption>
-        </figure>
-      </section>
-
       <section id="next" aria-labelledby="next-h">
         <h2 id="next-h">What's next</h2>
         <p>I still think of this project as unfinished. These are the next steps, in the order I would take them.</p>
@@ -441,6 +450,113 @@ Authentication complete.
       box.addEventListener('pointerup', end);
       box.addEventListener('pointercancel', end);
     });
+
+    // Replay a terminal as if it were happening live: type the [data-type]
+    // text, then reveal each [data-pause] line after that many ms. A line
+    // marked [data-stream] arrives a word at a time, the way Claude writes.
+    // Without JS, or with reduced motion, the full text just shows.
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+    // Claude Code's question picker: open it, arrow down from the first
+    // option to [data-choice], press Enter, and close it again. While it is
+    // open it stands in for the lines after it, so the window keeps its size.
+    async function ask(panel) {
+      const options = [...panel.querySelectorAll('[data-option]')];
+      const target = options.findIndex((o) => o.hasAttribute('data-choice'));
+      const later = [];
+      for (let el = panel.nextElementSibling; el; el = el.nextElementSibling) later.push(el);
+
+      later.forEach((el) => el.classList.add('t-collapsed'));
+      panel.classList.remove('t-pending');
+      panel.classList.add('is-open');
+      options[0].classList.add('is-current');
+      await wait(1200);
+      for (let i = 1; i <= target; i++) {
+        options[i - 1].classList.remove('is-current');
+        options[i].classList.add('is-current');
+        await wait(i === target ? 800 : 500);
+      }
+      panel.classList.remove('is-open');
+      later.forEach((el) => el.classList.remove('t-collapsed'));
+    }
+
+    async function replay(pre) {
+      const typed = pre.querySelector('[data-type]');
+      const lines = pre.querySelectorAll('[data-pause]');
+      const text = typed.textContent;
+
+      pre.style.minHeight = pre.offsetHeight + 'px'; // hold the final size
+      lines.forEach((line) => line.classList.add('t-pending'));
+      typed.textContent = '';
+      const caret = document.createElement('span');
+      caret.className = 't-caret';
+      typed.append(caret);
+
+      await wait(600);
+      for (const ch of text) {
+        caret.before(ch);
+        await wait(35 + Math.random() * 55);
+      }
+      await wait(450);
+      caret.remove();
+      for (const line of lines) {
+        await wait(Number(line.dataset.pause));
+        if (line.hasAttribute('data-ask')) {
+          await ask(line);
+        } else if (line.hasAttribute('data-stream')) {
+          const words = line.textContent.split(/(?<= )/);
+          line.textContent = '';
+          line.classList.remove('t-pending');
+          for (const word of words) {
+            line.append(word);
+            await wait(45);
+          }
+        } else {
+          line.classList.remove('t-pending');
+        }
+      }
+      pre.style.minHeight = '';
+    }
+
+    // Hero slides: arrows only, no autoplay. Each slide replays the first
+    // time it is shown.
+    const slides = document.querySelector('.cs-slides');
+    if (slides) {
+      const items = [...slides.querySelectorAll('.cs-slide')];
+      const prev = slides.querySelector('.cs-slides__btn--prev');
+      const next = slides.querySelector('.cs-slides__btn--next');
+      const captions = [...slides.querySelectorAll('figcaption > span')];
+      const played = new Set();
+      let current = 0;
+
+      const show = (index) => {
+        current = index;
+        items.forEach((item, i) => {
+          item.classList.toggle('is-active', i === index);
+          item.inert = i !== index;
+          captions[i].classList.toggle('is-active', i === index);
+        });
+        prev.hidden = index === 0;
+        next.hidden = index === items.length - 1;
+        if (!reduceMotion && !played.has(index)) {
+          played.add(index);
+          replay(items[index].querySelector('pre'));
+        }
+      };
+
+      prev.addEventListener('click', () => {
+        show(current - 1);
+        next.focus(); // the pressed arrow just disappeared
+      });
+      next.addEventListener('click', () => {
+        show(current + 1);
+        prev.focus();
+      });
+      show(0);
+      // Next frame, so showing the first slide above never animates
+      requestAnimationFrame(() => slides.classList.add('is-animated'));
+    }
   </script>
 </body>
 </html>
