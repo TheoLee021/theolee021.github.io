@@ -134,7 +134,7 @@ nav .cs-back:focus-visible {
 }
 
 .cs-article h2::after {
-  margin: 10px 0 0;
+  content: none;
 }
 
 .cs-article h3 {
@@ -249,16 +249,6 @@ nav .cs-back:focus-visible {
   }
 }
 
-/* A short version of the teal rule under the section headings */
-.cs-tldr dt::after {
-  content: '';
-  display: block;
-  width: 24px;
-  height: 3px;
-  background: var(--secondary-color);
-  margin-top: 8px;
-}
-
 .cs-tldr dt {
   padding-top: 3px;
 }
@@ -306,7 +296,6 @@ nav .cs-back:focus-visible {
 }
 
 .cs-article .cs-callout {
-  border-left: 3px solid var(--secondary-color);
   background: #ffffff;
   padding: 14px 18px;
   font-size: 1.1rem;
